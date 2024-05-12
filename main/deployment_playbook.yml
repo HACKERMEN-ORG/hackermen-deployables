@@ -19,7 +19,7 @@
 
     - name: Clone Traefik configuration repository
       git:
-        repo: https://github.com/HACKERMEN-ORG/hackermen-deployables/traefik-config.git
+        repo: https://github.com/HACKERMEN-ORG/hackermen-deployables/main/traefik.toml
         dest: /opt/traefik-config
         version: main
 
