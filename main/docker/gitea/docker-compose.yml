@@ -28,8 +28,8 @@ services:
       - "222:22"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.mybb.rule=Host(`git.system.exposed`)"
-      - "traefik.http.routers.mybb.entrypoints=web"
+      - "traefik.http.routers.gitea.rule=Host(`git.system.exposed`)"
+      - "traefik.http.routers.gitea.entrypoints=web"
     depends_on:
       - db
 
