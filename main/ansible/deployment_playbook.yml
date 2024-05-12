@@ -99,6 +99,19 @@
           - "8000:8000" # Expose Focalboard on port 8000
         labels: "{{ focalboard_labels }}"
 
+
+#####GITEA#####
+    - name: Set labels dictionary for gitea
+      set_fact:
+        gitea_labels:
+          traefik.enable: "true"
+          traefik.http.routers.mybb.rule: "Host(`git.system.exposed`)"
+          traefik.http.routers.mybb.entrypoints: "web"
+
+    - name: Deploy gitea from docker-compose
+      docker_compose:
+        state: present
+
 #####myBB#####
     - name: Set labels dictionary for MyBB
       set_fact:
