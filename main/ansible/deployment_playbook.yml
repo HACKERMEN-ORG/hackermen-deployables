@@ -22,10 +22,16 @@
    #     repo: https://github.com/HACKERMEN-ORG/hackermen-deployables/main/traefik.toml
    #     dest: /opt/traefik-config
    #     version: main
+    - name: Create Traefik configuration directory
+      file:
+        path: /opt/traefik-config
+        state: directory
+
     - name: Download traefik.toml file
       get_url:
         url: "https://raw.githubusercontent.com/HACKERMEN-ORG/hackermen-deployables/main/main/traefik.toml"
-        dest: "/opt/traefik-config"
+        dest: "/opt/traefik-config/traefik.toml"
+
 
     - name: Set labels dictionary for Traefik
       set_fact:
