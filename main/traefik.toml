@@ -8,7 +8,7 @@
 # Entrypoints
 [entryPoints]
   [entryPoints.web]
-    address = ":80"
+    address = ":443"
 
 # API and dashboard configuration
 [api]
