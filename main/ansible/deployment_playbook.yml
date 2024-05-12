@@ -75,7 +75,7 @@
     - name: Deploy Organizr container
       docker_container:
         name: organizr
-        image: organizrtools/organizr-v2
+        image: organizr/organizr
         restart_policy: always
         ports:
           - "8081:80" # Expose Organizr on port 8081
