@@ -110,6 +110,7 @@
 
     - name: Deploy gitea from docker-compose
       docker_compose:
+        project_src: ../docker/gitea/
         state: present
 
 #####myBB#####
