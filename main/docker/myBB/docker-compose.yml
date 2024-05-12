@@ -3,15 +3,12 @@ services:
     image: mybb/mybb:latest
     volumes:
     - ${PWD}/mybb:/var/www/html:rw
-
-  nginx:
-    image: nginx:mainline-alpine
     ports:
-    - published: 8082
-      target: 80
-    volumes:
-    - ${PWD}/nginx:/etc/nginx/conf.d:ro
-    - ${PWD}/mybb:/var/www/html:ro
+      - "8081:80" # Expose MyBB on port 8081
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.mybb.rule=Host(`mybb.system.exposed`)"
+      - "traefik.http.routers.mybb.entrypoints=web"
 
   postgresql:
     environment:
