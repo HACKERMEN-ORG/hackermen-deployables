@@ -29,7 +29,10 @@
           traefik.enable: "true"
           traefik.http.routers.traefik.rule: "Host(`traefik.system.exposed`)"
           traefik.http.routers.traefik.service: "api@internal"
-          traefik.http.routers.traefik.entrypoints: "web"
+          traefik.http.routers.traefik.entrypoints: "web,websecure" # Listen on both HTTP and HTTPS entrypoints
+          traefik.http.routers.traefik.tls: "true" # Enable TLS for the router
+          traefik.http.routers.traefik.tls.certresolver: "myresolver" # Use the 'myresolver' certificate resolver
+
 
 
     - name: Download traefik.toml file
@@ -51,8 +54,11 @@
         volumes:
           - /var/run/docker.sock:/var/run/docker.sock
           - /opt/traefik-config/traefik.toml:/etc/traefik/traefik.toml
+          - /letsencrypt:/letsencrypt # Volume to store Let's Encrypt certificates and state
+
         ports:
           - "80:80"
+          - "443:443"
           - "8080:8080" # Traefik dashboard
 
         labels: "{{ traefik_labels }}"
@@ -69,7 +75,9 @@
         focalboard_labels:
           traefik.enable: "true"
           traefik.http.routers.focalboard.rule: "Host(`board.system.exposed`)"
-          traefik.http.routers.focalboard.entrypoints: "web"
+          traefik.http.routers.traefik.entrypoints: "web,websecure" # Listen on both HTTP and HTTPS entrypoints
+          traefik.http.routers.traefik.tls: "true" # Enable TLS for the router
+          traefik.http.routers.traefik.tls.certresolver: "myresolver" # Use the 'myresolver' certificate resolver
 
     - name: Deploy Focalboard container
       docker_container:
