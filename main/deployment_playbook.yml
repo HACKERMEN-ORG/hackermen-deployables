@@ -1,0 +1,63 @@
+---
+- name: Deploy Docker containers and Traefik with Ansible
+  hosts: myhosts
+  become: yes
+
+  tasks:
+    - name: Install Docker and Docker Compose
+      apt:
+        name: 
+          - docker.io
+          - docker-compose
+        state: present
+
+    - name: Ensure Docker service is started
+      service:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Clone Traefik configuration repository
+      git:
+        repo: https://github.com/HACKERMEN-ORG/hackermen-deployables/traefik-config.git
+        dest: /opt/traefik-config
+        version: main
+
+    - name: Deploy Traefik container
+      docker_container:
+        name: traefik
+        image: traefik:v2.6
+        restart_policy: always
+        command: 
+          - "--api.insecure=true" # Enable insecure API for dynamic configuration
+          - "--providers.docker=true" # Enable Docker provider
+          - "--providers.docker.exposedbydefault=false" # Do not expose all containers by default
+          - "--entrypoints.web.address=:80"
+        volumes:
+          - /var/run/docker.sock:/var/run/docker.sock
+          - /opt/traefik-config/traefik.toml:/etc/traefik/traefik.toml
+        ports:
+          - "80:80"
+          - "8080:8080" # Traefik dashboard
+        labels:
+          - "traefik.enable=true"
+          - "traefik.http.routers.traefik.rule=Host(`traefik.system.exposed`)"
+          - "traefik.http.routers.traefik.service=api@internal"
+          - "traefik.http.routers.traefik.entrypoints=web"
+
+    - name: Deploy Focalboard container
+      docker_container:
+        name: focalboard
+        image: mattermost/focalboard:latest
+        restart_policy: always
+        ports:
+          - "8000:8000" # Expose Focalboard on port 8000
+        labels:
+          - "traefik.enable=true"
+          - "traefik.http.routers.focalboard.rule=Host(`board.system.exposed`)"
+          - "traefik.http.routers.focalboard.entrypoints=web"
+
+#    - name: Deploy other Docker containers
+#      docker_compose:
+#        project_src: /path/to/your/docker-compose.yml
+#        state: present
