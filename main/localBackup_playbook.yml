@@ -11,3 +11,5 @@
 
     - name: Create disk image backup
       command: "dd if=/dev/sda of=/backup/server_backup.img bs=4M"
+
+#Saves a copy of the entire filesystem on the server
