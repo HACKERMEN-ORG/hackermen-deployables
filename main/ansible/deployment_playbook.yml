@@ -107,14 +107,19 @@
           traefik.http.routers.mybb.rule: "Host(`forum.system.exposed`)"
           traefik.http.routers.mybb.entrypoints: "web"
 
-    - name: Deploy MyBB container
-      docker_container:
-        name: mybb
-        image: mybb/mybb:latest
-        restart_policy: always
-        ports:
-          - "8082:80" # Expose MyBB on port 8082
-        labels: "{{ mybb_labels }}"
+    - name: Deploy myBB from docker-compose
+      docker_compose:
+        project_src: ../docker/myBB/docker-compose.yml
+        state: present
+
+  #  - name: Deploy MyBB container
+  #    docker_container:
+  #      name: mybb
+  #      image: mybb/mybb:latest
+  #      restart_policy: always
+  #      ports:
+  #        - "8082:80" # Expose MyBB on port 8082
+  #      labels: "{{ mybb_labels }}"
 
 
 #    - name: Deploy other Docker containers
