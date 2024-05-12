@@ -99,6 +99,24 @@
           - "8000:8000" # Expose Focalboard on port 8000
         labels: "{{ focalboard_labels }}"
 
+#####myBB#####
+- name: Set labels dictionary for MyBB
+  set_fact:
+    mybb_labels:
+      traefik.enable: "true"
+      traefik.http.routers.mybb.rule: "Host(`forum.system.exposed`)"
+      traefik.http.routers.mybb.entrypoints: "web"
+
+- name: Deploy MyBB container
+  docker_container:
+    name: mybb
+    image: mybb/mybb:latest
+    restart_policy: always
+    ports:
+      - "8082:80" # Expose MyBB on port 8082
+    labels: "{{ mybb_labels }}"
+
+
 #    - name: Deploy other Docker containers
 #      docker_compose:
 #        project_src: /path/to/your/docker-compose.yml
