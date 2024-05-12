@@ -17,11 +17,26 @@
         state: started
         enabled: yes
 
-    - name: Clone Traefik configuration repository
-      git:
-        repo: https://github.com/HACKERMEN-ORG/hackermen-deployables/main/traefik.toml
-        dest: /opt/traefik-config
-        version: main
+   # - name: Clone Traefik configuration repository
+   #   git:
+   #     repo: https://github.com/HACKERMEN-ORG/hackermen-deployables/main/traefik.toml
+   #     dest: /opt/traefik-config
+   #     version: main
+
+    - name: Set labels dictionary for Traefik
+      set_fact:
+        traefik_labels:
+          traefik.enable: "true"
+          traefik.http.routers.traefik.rule: "Host(`traefik.system.exposed`)"
+          traefik.http.routers.traefik.service: "api@internal"
+          traefik.http.routers.traefik.entrypoints: "web"
+
+
+    - name: Download traefik.toml file
+      get_url:
+        url: "https://raw.githubusercontent.com/HACKERMEN-ORG/hackermen-deployables/main/main/traefik.toml"
+        dest: "/opt/traefik-config"
+
 
     - name: Deploy Traefik container
       docker_container:
@@ -39,11 +54,22 @@
         ports:
           - "80:80"
           - "8080:8080" # Traefik dashboard
-        labels:
-          - "traefik.enable=true"
-          - "traefik.http.routers.traefik.rule=Host(`traefik.system.exposed`)"
-          - "traefik.http.routers.traefik.service=api@internal"
-          - "traefik.http.routers.traefik.entrypoints=web"
+
+        labels: "{{ traefik_labels }}"
+
+        #labels:
+        #  - "traefik.enable=true"
+        #  - "traefik.http.routers.traefik.rule=Host(`traefik.system.exposed`)"
+        #  - "traefik.http.routers.traefik.service=api@internal"
+        #  - "traefik.http.routers.traefik.entrypoints=web"
+
+
+    - name: Set labels dictionary for Focalboard
+      set_fact:
+        focalboard_labels:
+          traefik.enable: "true"
+          traefik.http.routers.focalboard.rule: "Host(`board.system.exposed`)"
+          traefik.http.routers.focalboard.entrypoints: "web"
 
     - name: Deploy Focalboard container
       docker_container:
@@ -52,10 +78,13 @@
         restart_policy: always
         ports:
           - "8000:8000" # Expose Focalboard on port 8000
-        labels:
-          - "traefik.enable=true"
-          - "traefik.http.routers.focalboard.rule=Host(`board.system.exposed`)"
-          - "traefik.http.routers.focalboard.entrypoints=web"
+        labels: "{{ focalboard_labels }}"
+
+
+#        labels:
+#          - "traefik.enable=true"
+#          - "traefik.http.routers.focalboard.rule=Host(`board.system.exposed`)"
+#          - "traefik.http.routers.focalboard.entrypoints=web"
 
 #    - name: Deploy other Docker containers
 #      docker_compose:
