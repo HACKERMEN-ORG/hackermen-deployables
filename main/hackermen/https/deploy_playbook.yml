@@ -54,7 +54,7 @@
           - "--providers.docker=true" # Enable Docker provider
           - "--providers.docker.exposedbydefault=false" # Do not expose all containers by default
           - "--entrypoints.web.address=:80"
-           - "--entrypoints.websecure.address=:443" # HTTPS entrypoint
+          - "--entrypoints.websecure.address=:443" # HTTPS entrypoint
         volumes:
           - /var/run/docker.sock:/var/run/docker.sock
           - /opt/traefik-config/traefik.toml:/etc/traefik/traefik.toml
@@ -112,7 +112,7 @@
 
     - name: Deploy gitea from docker-compose
       docker_compose:
-        project_src: ../docker/gitea/
+        project_src: ./docker/gitea/
         state: present
 
 #####myBB#####
@@ -125,7 +125,7 @@
 
     - name: Deploy myBB from docker-compose
       docker_compose:
-        project_src: ../docker/myBB/
+        project_src: ./docker/myBB/
         state: present
 
   #  - name: Deploy MyBB container
