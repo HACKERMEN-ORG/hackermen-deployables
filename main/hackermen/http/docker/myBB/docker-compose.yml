@@ -1,0 +1,22 @@
+services:
+  mybb:
+    image: mybb/mybb:latest
+    volumes:
+    - ${PWD}/mybb:/var/www/html:rw
+    ports:
+      - "8082:80" # Expose MyBB on port 8082
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.mybb.rule=Host(`mybb.system.exposed`)"
+      - "traefik.http.routers.mybb.entrypoints=web"
+
+  postgresql:
+    environment:
+      POSTGRES_DB: mybb
+      POSTGRES_PASSWORD: changeme
+      POSTGRES_USER: mybb
+    image: postgres:14-alpine
+    volumes:
+    - ${PWD}/postgres/data:/var/lib/postgresql/data:rw
+
+version: '3.8'

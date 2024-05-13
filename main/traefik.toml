@@ -9,6 +9,8 @@
 [entryPoints]
   [entryPoints.web]
     address = ":80"
+  [entryPoints.websecure]  # Add HTTPS entrypoint
+    address = ":443"
 
 # API and dashboard configuration
 [api]
