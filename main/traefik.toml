@@ -31,3 +31,14 @@
     exposedByDefault = false
   [providers.file]
     filename = "/etc/traefik/dynamic.toml"
+
+
+# Certificate resolvers
+[certificatesResolvers.myresolver.acme]
+  email = "your-email@example.com"  # Your email address for Let's Encrypt notifications
+  storage = "/acme.json"  # Path to the ACME storage file
+  [certificatesResolvers.myresolver.acme.httpChallenge]
+    entryPoint = "web"  # The entrypoint to use for HTTP challenge
+  [certificatesResolvers.myresolver.acme.httpsChallenge]
+    entryPoint = "websecure"  # The entrypoint to use for HTTPS challenge
+
