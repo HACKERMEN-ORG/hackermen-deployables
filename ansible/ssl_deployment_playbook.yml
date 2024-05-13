@@ -1,6 +1,6 @@
 ---
 - name: Deploy Docker containers and Traefik with Ansible
-  hosts: myhosts
+  hosts: localhosts
   become: yes
 
   tasks:
@@ -38,7 +38,7 @@
 
     - name: Download traefik.toml file
       get_url:
-        url: "https://raw.githubusercontent.com/HACKERMEN-ORG/hackermen-deployables/main/main/traefik.toml"
+        url: "https://raw.githubusercontent.com/HACKERMEN-ORG/hackermen-deployables/main/traefik.toml"
         dest: "/opt/traefik-config"
 
 
