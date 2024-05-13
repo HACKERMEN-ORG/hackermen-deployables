@@ -1,6 +1,6 @@
 ---
 - name: Deploy Docker containers and Traefik with Ansible
-  hosts: localhosts
+  hosts: localhost
   become: yes
 
   tasks:
