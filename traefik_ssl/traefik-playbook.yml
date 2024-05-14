@@ -33,5 +33,5 @@
 
     - name: Deploy traefik
       docker_compose:
-        project_src: /docker-compose.yml
+        project_src: .
         state: present
