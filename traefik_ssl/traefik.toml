@@ -30,3 +30,12 @@
   email = "me@domain.org"
   storage = "acme.json"
   [certificatesResolvers.le.acme.tlsChallenge]
+
+[http.services]
+  [http.services.myService.loadBalancer]
+    [[http.services.myService.loadBalancer.servers]]
+        url = "http://<ip>:<port>"
+
+[http.middlewares]
+  [http.middlewares.myServiceAuth.basicAuth]
+    users = ["user:$xx$xx$xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"]

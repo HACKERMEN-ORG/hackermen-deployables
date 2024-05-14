@@ -1,0 +1,24 @@
+---
+- name: Install and configure Traefik reverse-proxy
+  hosts: localhost
+
+#  roles:
+#    - role: ansible-traefik-docker
+#      traefik_domain: "mydomain.org"
+#      traefik_acme_email: "user@mydomain.org"
+#      traefik_dashboard_basicauth_users: ["user:$$apr1$$somehash"]
+
+  - name: Create Traefik configuration directory
+    file:
+      path: /opt/traefik-config
+      state: directory
+
+  - name: Download traefik.toml file
+    get_url:
+      url: "https://raw.githubusercontent.com/HACKERMEN-ORG/hackermen-deployables/main/traefik.toml"
+      dest: "/opt/traefik-config/traefik.toml"
+
+  - name: Deploy other Docker containers
+    docker_compose:
+      project_src: /docker-compose.yml
+      state: present
