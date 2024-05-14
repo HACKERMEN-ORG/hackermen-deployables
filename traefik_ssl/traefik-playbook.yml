@@ -7,18 +7,31 @@
 #      traefik_domain: "mydomain.org"
 #      traefik_acme_email: "user@mydomain.org"
 #      traefik_dashboard_basicauth_users: ["user:$$apr1$$somehash"]
+  tasks: 
+    - name: Install Docker and Docker Compose
+      apt:
+        name: 
+          - docker.io
+          - docker-compose
+        state: present
 
-  - name: Create Traefik configuration directory
-    file:
-      path: /opt/traefik-config
-      state: directory
+    - name: Ensure Docker service is started
+      service:
+        name: docker
+        state: started
+        enabled: yes
 
-  - name: Download traefik.toml file
-    get_url:
-      url: "https://raw.githubusercontent.com/HACKERMEN-ORG/hackermen-deployables/main/traefik.toml"
-      dest: "/opt/traefik-config/traefik.toml"
+    - name: Create Traefik configuration directory
+      file:
+        path: /opt/traefik-config
+        state: directory
 
-  - name: Deploy other Docker containers
-    docker_compose:
-      project_src: /docker-compose.yml
-      state: present
+    - name: Download traefik.toml file
+      get_url:
+        url: "https://raw.githubusercontent.com/HACKERMEN-ORG/hackermen-deployables/main/traefik.toml"
+        dest: "/opt/traefik-config/traefik.toml"
+
+    - name: Deploy traefik
+      docker_compose:
+        project_src: /docker-compose.yml
+        state: present
