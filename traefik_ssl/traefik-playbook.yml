@@ -35,3 +35,9 @@
       docker_compose:
         project_src: .
         state: present
+
+    - name: Ensure Docker service is started
+      service:
+        name: traefik
+        state: started
+        enabled: yes
