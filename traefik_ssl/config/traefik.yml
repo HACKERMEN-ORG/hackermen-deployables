@@ -34,7 +34,7 @@ entryPoints:
   websecure:
     address: :443
   # -- (Optional) Add custom Entrypoint
- custom:
+  custom:
     address: :8080
 
 # -- Configure your CertificateResolver here...
