@@ -1,7 +1,7 @@
 # -- (Optional) Enable API and Dashboard here, don't do in production
- api:
-   dashboard: true
-   insecure: true
+api:
+  dashboard: true
+  insecure: true
 
 # -- Change EntryPoints here...
 entryPoints:
