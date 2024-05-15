@@ -11,7 +11,7 @@ services:
       - "traefik.http.routers.dashboard.rule=Host(`dashboard-subdomain.overflow.no`)"
       - "traefik.http.routers.dashboard.service=api@internal"
       - "traefik.http.routers.dashboard.tls=true"
-      - "traefik.http.routers.dashboard.tls.certresolver=le"
+      - "traefik.http.routers.dashboard.tls.certresolver=staging"
       - "traefik.http.routers.dashboard.middlewares=dashboardAuth"
       - "traefik.http.middlewares.dashboardAuth.basicauth.users=user:$$xx$$xx$$xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
       - "traefik.http.routers.httpCatchall.rule=HostRegexp(`{any:.+}`)"
