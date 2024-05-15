@@ -53,11 +53,11 @@ certificatesResolvers:
 #         resolvers:
 #           - "1.1.1.1:53"
 #           - "8.8.8.8:53"
-  production:
-    acme:
-      email: your-email@example.com
-        storage: /etc/traefik/certs/acme.json
-        caServer: "https://acme-v02.api.letsencrypt.org/directory"
+  #production:
+    #acme:
+      #email: your-email@example.com
+        #storage: /etc/traefik/certs/acme.json
+        #caServer: "https://acme-v02.api.letsencrypt.org/directory"
 #       -- (Optional) Remove this section, when using DNS Challenge
 #       httpChallenge:
 #         entryPoint: web
