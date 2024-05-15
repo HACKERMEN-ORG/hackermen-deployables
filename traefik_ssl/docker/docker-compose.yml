@@ -17,7 +17,7 @@ services:
       - ./config/traefik.yaml:/etc/traefik/traefik.yaml:ro
       - ./config/conf/:/etc/traefik/conf/
       - ./config/certs/:/etc/traefik/certs/
-     labels:
+    labels:
       - "traefik.enable=true"
       - "traefik.http.routers.dashboard.rule=Host(`dashboard-subdomain.overflow.no`)"
       - "traefik.http.routers.dashboard.service=api@internal"

@@ -33,7 +33,7 @@
 
     - name: Deploy traefik
       docker_compose:
-        project_src: 
+        project_src: ./docker/
         state: present
 
     - name: Ensure Docker service is started
