@@ -17,33 +17,33 @@ global:
 #   filePath: /var/log/traefik/access.log
 
 # -- (Optional) Enable API and Dashboard here, don't do in production
-# api:
-#   dashboard: true
-#   insecure: true
+api:
+  dashboard: true
+  insecure: true
 
 # -- Change EntryPoints here...
 entryPoints:
   web:
     address: :80
     # -- (Optional) Redirect all HTTP to HTTPS
-    # http:
-    #   redirections:
-    #     entryPoint:
-    #       to: websecure
-    #       scheme: https
+    http:
+      redirections:
+       entryPoint:
+         to: websecure
+         scheme: https
   websecure:
     address: :443
   # -- (Optional) Add custom Entrypoint
-  # custom:
-  #   address: :8080
+ custom:
+    address: :8080
 
 # -- Configure your CertificateResolver here...
-# certificatesResolvers:
-#   staging:
-#     acme:
-#       email: your-email@example.com
-#       storage: /etc/traefik/certs/acme.json
-#       caServer: "https://acme-staging-v02.api.letsencrypt.org/directory"
+certificatesResolvers:
+  staging:
+    acme:
+      email: your-email@example.com
+      storage: /etc/traefik/certs/acme.json
+      caServer: "https://acme-staging-v02.api.letsencrypt.org/directory"
 #       -- (Optional) Remove this section, when using DNS Challenge
 #       httpChallenge:
 #         entryPoint: web
@@ -53,11 +53,11 @@ entryPoints:
 #         resolvers:
 #           - "1.1.1.1:53"
 #           - "8.8.8.8:53"
-#   production:
-#     acme:
-#       email: your-email@example.com
-#       storage: /etc/traefik/certs/acme.json
-#       caServer: "https://acme-v02.api.letsencrypt.org/directory"
+  production:
+    acme:
+      email: your-email@example.com
+        storage: /etc/traefik/certs/acme.json
+        caServer: "https://acme-v02.api.letsencrypt.org/directory"
 #       -- (Optional) Remove this section, when using DNS Challenge
 #       httpChallenge:
 #         entryPoint: web
