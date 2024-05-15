@@ -14,7 +14,7 @@ services:
       # - 8080:8080
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - /opt/traefik-config/traefik.toml:/etc/traefik/traefik.yml
+      - /opt/traefik-config/traefik.yml:/etc/traefik/traefik.yml
      # - ./config/traefik.yaml:/etc/traefik/traefik.yaml:ro
       - ./config/conf/:/etc/traefik/conf/
       - ./config/certs/:/etc/traefik/certs/
