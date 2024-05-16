@@ -1,25 +1,20 @@
-# hackermen-deployables
-Deployable items for hackerman (pull your shit here)
+# HACKERMEN
+### internet gigachads
+##### Mission
+create a community of like minded technical individuals with the infrastructure in place to collaborate efficiently
 
-## How to use ansible
+##### Process
+Use Ansible to automate the deployment and long term support of required infrastructure.
+The Ansible playbook will use Docker for containerization and Traefik as the dynamic reverse proxy
+All essential services will be deployed with docker-compose within the playbook.
+Essential services are the bare minimum resources required for an organization to operation.
+These include communications such as email, instant messaging, forum based threads, and infrastructure services such as VM and container orchestration, shared drives, and various groupware etc.
+After deployment, ease of migration and data redundancy is essential to ensure smooth transition between hosts and ensure permanence of the project and long term support using automated playbooks.
 
-### ansible playbook
-Change yaml
+##### Current Objective
 
-`hosts: <your host> # eg. localhost`
-
-Add ssh keys to the host
-
-`ssh-copy-id -i YOUR PRIVATE KEY`
-
-DEPLOY!!!
-
-`$ ansible-playbook <the configuration you want to run>.yml # etc.`
-
-
-GOAL: Automate the deployment of 
-
-Essential Services:
+##### Automate the deployment of the following using Ansible
+ Essential Services
 
     Infrastructure
         Docker - containerization
@@ -71,3 +66,21 @@ Essential Services:
         Paperless - document scanner 
         Privatebin - encrypted pastebin
         Flashpaper - one time encrypted secret share
+
+```
+
+##### How to use ansible
+Ensure public ssh keys are located on clients
+`ssh-copy-id -i YOUR PRIVATE KEY`
+
+To run as local host configure yaml config:
+`hosts: <your host> # eg. localhost`
+
+To run the playbook in your current directory
+`$ ansible-playbook <the configuration you want to run>.yml # etc.`
+
+DEPLOY!!!
+
+[TO BE CONTINUED] 
+
+
