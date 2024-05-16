@@ -1,9 +1,9 @@
 # HACKERMEN
 ### internet gigachads
-##### Mission
+#### Mission
 create a community of like minded technical individuals with the infrastructure in place to collaborate efficiently
 
-##### Process
+#### Process
 Use Ansible to automate the deployment and long term support of required infrastructure.
 The Ansible playbook will use Docker for containerization and Traefik as the dynamic reverse proxy
 All essential services will be deployed with docker-compose within the playbook.
@@ -11,9 +11,9 @@ Essential services are the bare minimum resources required for an organization t
 These include communications such as email, instant messaging, forum based threads, and infrastructure services such as VM and container orchestration, shared drives, and various groupware etc.
 After deployment, ease of migration and data redundancy is essential to ensure smooth transition between hosts and ensure permanence of the project and long term support using automated playbooks.
 
-##### Current Objective
+#### Current Objective
 
-##### Automate the deployment of the following using Ansible
+#### Automate the deployment of the following using Ansible
  Essential Services
 
     Infrastructure
@@ -67,9 +67,7 @@ After deployment, ease of migration and data redundancy is essential to ensure s
         Privatebin - encrypted pastebin
         Flashpaper - one time encrypted secret share
 
-```
-
-##### How to use ansible
+#### How to use ansible
 Ensure public ssh keys are located on clients
 `ssh-copy-id -i YOUR PRIVATE KEY`
 
