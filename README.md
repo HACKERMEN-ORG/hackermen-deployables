@@ -29,10 +29,13 @@ Essential Services:
         Portainer - allow deployment of docker containers
         TBD - Cloud storage service, NextCloud?
         TBD - nightly backups (Tarsnap? Rsnapshot?)
+        Security - determine services for logging and 
     
     Development
         Gitea - git server
         Code-Server - vscode web client
+        Wiki - determine wiki for more elaborate projects
+        Clearflask - user feedback and dev road map?
 
     Communication
         Mailu - mail server with roundcube webmail client
@@ -59,4 +62,12 @@ Essential Services:
         Searx - search engine
 
     Noteable Services:
+        MyPaaS - docker and traefik automated deployment (captnbp/mypaas)
         PikaPod - deploy self hosted services
+        VirtKick - VPS admin panel with billing
+        Virtualmin - VPS admin panel
+        Cloudron
+        Coolify - Vercel clone
+        Paperless - document scanner 
+        Privatebin - encrypted pastebin
+        Flashpaper - one time encrypted secret share
