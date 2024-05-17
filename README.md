@@ -69,6 +69,11 @@ After deployment, ease of migration and data redundancy is essential to ensure s
         Privatebin - encrypted pastebin
         Flashpaper - one time encrypted secret share
 
+    Basic services
+        pass (unix program) password manager
+        RSS feed client server
+        web page deployment
+
 #### How to use ansible
 Ensure public ssh keys are located on clients
 `ssh-copy-id -i YOUR PRIVATE KEY`
