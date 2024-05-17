@@ -28,7 +28,7 @@
 
     - name: Download traefik.toml file
       get_url:
-        url: "https://raw.githubusercontent.com/HACKERMEN-ORG/hackermen-deployables/ansible/hackermen/config/traefik.yml"
+        url: "https://raw.githubusercontent.com/HACKERMEN-ORG/hackermen-deployables/main/ansible/hackermen/config/traefik.yml"
         dest: "/opt/traefik-config/traefik.yml"
 
     - name: Deploy traefik
