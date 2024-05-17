@@ -13,6 +13,8 @@ After deployment, ease of migration and data redundancy is essential to ensure s
 
 #### Current Objective
 
+### [START HACKERMANING HERE!](https://github.com/hackerman-org/hackermen-deployables/main/ansible/hackermen/)
+
 #### Automate the deployment of the following using Ansible
  Essential Services
 

@@ -35,13 +35,7 @@
       docker_compose:
         project_src: ./docker/
         state: present
-
-#    - name: Ensure Docker service is started
-#      service:
-#        name: traefik
-#        state: started
-#        enabled: yes
-
+#CHANGE FOCALBOARD DEPLOYMENT TO DOCKER-COMPOSE  -- ^^ Traefik is proper example of deployment
     - name: Set labels dictionary for Focalboard
       set_fact:
         focalboard_labels:
