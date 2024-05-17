@@ -36,11 +36,11 @@
         project_src: ./docker/
         state: present
 
-    - name: Ensure Docker service is started
-      service:
-        name: traefik
-        state: started
-        enabled: yes
+#    - name: Ensure Docker service is started
+#      service:
+#        name: traefik
+#        state: started
+#        enabled: yes
 
     - name: Set labels dictionary for Focalboard
       set_fact:
