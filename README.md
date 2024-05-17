@@ -1,5 +1,8 @@
 # HACKERMEN
-### internet gigachads
+## internet gigachads
+
+### [START HACKING](https://github.com/HACKERMEN-ORG/hackermen-deployables/tree/main/ansible/hackermen)
+
 #### Mission
 create a community of like minded technical individuals with the infrastructure in place to collaborate efficiently
 
@@ -12,8 +15,6 @@ These include communications such as email, instant messaging, forum based threa
 After deployment, ease of migration and data redundancy is essential to ensure smooth transition between hosts and ensure permanence of the project and long term support using automated playbooks.
 
 #### Current Objective
-
-### [START HACKERMANING HERE!](https://github.com/HACKERMEN-ORG/hackermen-deployables/tree/main/ansible/hackermen)
 
 #### Automate the deployment of the following using Ansible
  Essential Services
