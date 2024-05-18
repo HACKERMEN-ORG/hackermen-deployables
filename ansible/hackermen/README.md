@@ -14,25 +14,26 @@ The traefik configuration (./config/traefik.yml) is downloaded from get_url whic
 the playbook creates the directory /opt/traefik-config and saves the config
 
 the docker-compose creates a volume in that directory 
-      - `/opt/traefik-config/traefik.yml:/etc/traefik/traefik.yml`
+- `/opt/traefik-config/traefik.yml:/etc/traefik/traefik.yml`
 
 the following labels are needed for SSL/TLS:
-    - `traefik.enable=true`
-      - ``traefik.http.routers.dashboard.rule=Host(`dashboard-subdomain.overflow.no`)``
-      - `traefik.http.routers.dashboard.service=api@internal`
-      - `traefik.http.routers.dashboard.tls=true`
-      - `traefik.http.routers.dashboard.tls.certresolver=staging`
+- `traefik.enable=true`
+- ``traefik.http.routers.dashboard.rule=Host(`dashboard-subdomain.overflow.no`)``
+- `traefik.http.routers.dashboard.service=api@internal`
+- `traefik.http.routers.dashboard.tls=true`
+- `traefik.http.routers.dashboard.tls.certresolver=staging`
 
 HTTPS Redirection:
-      - `traefik.http.routers.httpCatchall.rule=HostRegexp(\`{any:.+}\`)`
-      - `traefik.http.routers.httpCatchall.entrypoints=http`
-      - `traefik.http.routers.httpCatchall.middlewares=httpsRedirect`
-      - `traefik.http.middlewares.httpsRedirect.redirectscheme.scheme=https`
-      - `traefik.http.middlewares.httpsRedirect.redirectscheme.permanent=true`
+- `traefik.http.routers.httpCatchall.rule=HostRegexp(\`{any:.+}\`)`
+- `traefik.http.routers.httpCatchall.entrypoints=http`
+- `traefik.http.routers.httpCatchall.middlewares=httpsRedirect`
+- `traefik.http.middlewares.httpsRedirect.redirectscheme.scheme=https`
+- `traefik.http.middlewares.httpsRedirect.redirectscheme.permanent=true`
+
     
 Dashboard Authentication Middleware labels:
-      - `traefik.http.routers.dashboard.middlewares=dashboardAuth`
-      - `traefik.http.middlewares.dashboardAuth.basicauth users=user:$$xx$$xx$$xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx`
+- `traefik.http.routers.dashboard.middlewares=dashboardAuth`
+- `traefik.http.middlewares.dashboardAuth.basicauth users=user:$$xx$$xx$$xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx`
 
 
 
