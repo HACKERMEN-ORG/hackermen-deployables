@@ -9,7 +9,7 @@ This playbook downloads docker and docker-compose and deploys the compose file f
 
 All services will need to be configured with docker-compose for ease of deployment. It allows changes to be made to the labels of the individual docker services without modifying the ansible script and as an example allows the service to run as a cronjob pulling the latest docker configurations from the repo.
 
-The traefik configuration (./config/traefik.yml) is downloaded from get_url which is hardcoded, will break on directory changes, needs fixed.
+The traefik configuration `./config/traefik.yml` is downloaded from get_url which is hardcoded, will break on directory changes, needs fixed.
 
 the playbook creates the directory /opt/traefik-config and saves the config
 
