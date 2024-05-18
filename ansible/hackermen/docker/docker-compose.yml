@@ -20,17 +20,17 @@ services:
       - ./config/certs/:/etc/traefik/certs/
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.dashboard.rule=Host(`dashboard-subdomain.overflow.no`)"
+      - "traefik.http.routers.dashboard.rule=Host(`traefik.system.exposed`)"
       - "traefik.http.routers.dashboard.service=api@internal"
       - "traefik.http.routers.dashboard.tls=true"
       - "traefik.http.routers.dashboard.tls.certresolver=staging"
     #  - "traefik.http.routers.dashboard.middlewares=dashboardAuth"
     #  - "traefik.http.middlewares.dashboardAuth.basicauth.users=user:$$xx$$xx$$xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-      - "traefik.http.routers.httpCatchall.rule=HostRegexp(`{any:.+}`)"
-      - "traefik.http.routers.httpCatchall.entrypoints=http"
-      - "traefik.http.routers.httpCatchall.middlewares=httpsRedirect"
-      - "traefik.http.middlewares.httpsRedirect.redirectscheme.scheme=https"
-      - "traefik.http.middlewares.httpsRedirect.redirectscheme.permanent=true"
+    #  - "traefik.http.routers.httpCatchall.rule=HostRegexp(`{any:.+}`)"
+    #  - "traefik.http.routers.httpCatchall.entrypoints=http"
+    #  - "traefik.http.routers.httpCatchall.middlewares=httpsRedirect"
+    #  - "traefik.http.middlewares.httpsRedirect.redirectscheme.scheme=https"
+    #  - "traefik.http.middlewares.httpsRedirect.redirectscheme.permanent=true"
     # -- (Optional) When using Cloudflare as Cert Resolver
     # environment:
     #   - CF_DNS_API_TOKEN=your-cloudflare-api-token

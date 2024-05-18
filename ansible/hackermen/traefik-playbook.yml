@@ -49,5 +49,5 @@
         image: mattermost/focalboard:latest
         restart_policy: always
         ports:
-          - "8000:8000" # Expose Focalboard on port 8000
+          - "8000:80" # Expose Focalboard on port 8000
         labels: "{{ focalboard_labels }}"
