@@ -24,7 +24,7 @@ the following labels are needed for SSL/TLS:
 - `traefik.http.routers.dashboard.tls.certresolver=staging`
 
 HTTPS Redirection:
-- `traefik.http.routers.httpCatchall.rule=HostRegexp(\`{any:.+}\`)`
+- ``traefik.http.routers.httpCatchall.rule=HostRegexp(`{any:.+}`)``
 - `traefik.http.routers.httpCatchall.entrypoints=http`
 - `traefik.http.routers.httpCatchall.middlewares=httpsRedirect`
 - `traefik.http.middlewares.httpsRedirect.redirectscheme.scheme=https`
