@@ -1,7 +1,7 @@
 # HACKERMEN
 ### internet gigachads
 
-### [START HACKING](https://github.com/HACKERMEN-ORG/hackermen-deployables/tree/main/ansible/hackermen)
+### [START HACKING](https://github.com/HACKERMEN-ORG/hackermen-deployables/tree/main/ansible/hackermen) (go to docs folder)
 
 #### Mission
 create a community of like minded technical individuals with the infrastructure in place to collaborate efficiently
