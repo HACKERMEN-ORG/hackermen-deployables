@@ -18,7 +18,7 @@ the docker-compose creates a volume in that directory
 
 the following labels are needed for SSL/TLS:
     - `traefik.enable=true`
-      - `traefik.http.routers.dashboard.rule=Host(``dashboard-subdomain.overflow.no`)``
+      - ``traefik.http.routers.dashboard.rule=Host(`dashboard-subdomain.overflow.no`)``
       - `traefik.http.routers.dashboard.service=api@internal`
       - `traefik.http.routers.dashboard.tls=true`
       - `traefik.http.routers.dashboard.tls.certresolver=staging`
