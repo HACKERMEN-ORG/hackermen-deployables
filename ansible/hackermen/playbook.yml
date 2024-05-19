@@ -1,0 +1,27 @@
+---
+- name: Install and configure Traefik reverse-proxy
+  hosts: localhost
+
+#  roles:
+#    - role: ansible-traefik-docker
+#      traefik_domain: "mydomain.org"
+#      traefik_acme_email: "user@mydomain.org"
+#      traefik_dashboard_basicauth_users: ["user:$$apr1$$somehash"]
+  tasks: 
+    - name: Install Docker and Docker Compose
+      apt:
+        name: 
+          - docker.io
+          - docker-compose
+        state: present
+
+    - name: Ensure Docker service is started
+      service:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Deploy traefik
+      docker_compose:
+        project_src: .
+        state: present
