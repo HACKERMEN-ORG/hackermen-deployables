@@ -20,7 +20,7 @@ services:
       TRAEFIK_DASHBOARD_CREDENTIALS: ${TRAEFIK_DASHBOARD_CREDENTIALS}  #=user:pass
     #secrets:
     #  - cf_api_token
-      env_file: .env # use .env
+    env_file: .env # use .env
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
