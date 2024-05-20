@@ -4,10 +4,10 @@ services:
     image: mattermost/focalboard:latest
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.nginx.rule=Host(`board.system.exposed`)"
-      - "traefik.http.routers.nginx.entrypoints=https"
-      - "traefik.http.routers.nginx.tls=true"
-      - "traefik.http.services.nginx.loadbalancer.server.port=8000"
+      - "traefik.http.routers.focalboard.rule=Host(`board.system.exposed`)"
+      - "traefik.http.routers.focalboard.entrypoints=https"
+      - "traefik.http.routers.focalboard.tls=true"
+      - "traefik.http.services.focalboard.loadbalancer.server.port=8000"
     networks:
       - proxy
 

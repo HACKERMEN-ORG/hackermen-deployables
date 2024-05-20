@@ -4,10 +4,10 @@ services:
     image: mybb/mybb:latest
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.nginx.rule=Host(`forum.system.exposed`)"
-      - "traefik.http.routers.nginx.entrypoints=https"
-      - "traefik.http.routers.nginx.tls=true"
-      - "traefik.http.services.nginx.loadbalancer.server.port=8001"
+      - "traefik.http.routers.mybb.rule=Host(`forum.system.exposed`)"
+      - "traefik.http.routers.mybb.entrypoints=https"
+      - "traefik.http.routers.mybb.tls=true"
+      - "traefik.http.services.mybb.loadbalancer.server.port=8001"
     networks:
       - proxy
 
