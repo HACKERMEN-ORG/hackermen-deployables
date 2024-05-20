@@ -4,7 +4,7 @@ services:
     image: nginxdemos/nginx-hello
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.nginx.rule=Host('git.system.exposed')"
+      - "traefik.http.routers.nginx.rule=Host(`git.system.exposed`)"
       - "traefik.http.routers.nginx.entrypoints=https"
       - "traefik.http.routers.nginx.tls=true"
       - "traefik.http.services.nginx.loadbalancer.server.port=8081"
