@@ -1,0 +1,16 @@
+version: "3.8"
+services:
+  nginx:
+    image: mybb/mybb:latest
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.nginx.rule=Host(`forum.system.exposed`)"
+      - "traefik.http.routers.nginx.entrypoints=https"
+      - "traefik.http.routers.nginx.tls=true"
+      - "traefik.http.services.nginx.loadbalancer.server.port=8001"
+    networks:
+      - proxy
+
+networks:
+  proxy:
+    external: true
