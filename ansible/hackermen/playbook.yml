@@ -25,3 +25,35 @@
       docker_compose:
         project_src: .
         state: present
+
+
+    #INFRASTRUCTURE
+    - name: Deploy Organizr              #DASHBOARD
+      docker_compose:
+        project_src: ./docker/organizr/
+        state: present
+
+    ####COMMUNICATION
+    - name: Deploy Synapse and Matrix Client   #VOIP, GROUP, DMs
+      docker_compose:
+        project_src: ./docker/synapse/
+        state: present
+    
+    - name: Deploy mailu          #Email and web client
+      docker_compose:
+        project_src: ./docker/mailu/
+        state: present
+    
+    - name: Deploy myBB forum
+      docker_compose:
+        project_src: ./docker/mybb/
+        state: present
+
+
+  ####DEVELOPMENT
+    - name: Deploy Gitea
+        docker_compose:
+          project_src: ./docker/gitea/
+          state: present
+
+  

@@ -1,0 +1,66 @@
+# data/matrix/synapse/homeserver.yaml
+server_name: "matrix.example.com"
+
+pid_file: /data/homeserver.pid
+
+web_client_location: https://riot.example.com/
+
+public_baseurl: https://synapse.example.com/
+
+report_stats: true
+
+enable_registration: true
+
+listeners:
+  - port: 8008
+    tls: false
+    type: http
+    x_forwarded: true
+
+    resources:
+      - names: [client, federation]
+        compress: false
+
+retention:
+  enabled: true
+
+federation_ip_range_blacklist:
+  - '127.0.0.0/8'
+  - '10.0.0.0/8'
+  - '172.16.0.0/12'
+  - '192.168.0.0/16'
+  - '100.64.0.0/10'
+  - '169.254.0.0/16'
+  - '::1/128'
+  - 'fe80::/64'
+  - 'fc00::/7'
+
+database:
+  name: psycopg2
+  args:
+    user: synapse
+    password: password
+    database: synapse
+    host: postgres   
+    cp_min: 5
+    cp_max: 10
+
+log_config: "/data/matrix.example.com.log.config"
+
+media_store_path: "/data/media_store"
+
+registration_shared_secret: "abc"
+
+macaroon_secret_key: "abc"
+
+form_secret: "abc"
+
+signing_key_path: "/data/matrix.example.com.signing.key"
+
+trusted_key_servers:
+  - server_name: "matrix.org"
+
+redis:
+  enabled: true
+  host: redis
+  port: 6379

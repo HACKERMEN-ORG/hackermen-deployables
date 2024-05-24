@@ -1,0 +1,53 @@
+postgres:
+    image: "postgres:9.6"
+    restart: "unless-stopped"
+    environment:
+      POSTGRES_PASSWORD: "admin"
+    volumes:
+      - "./data/postgres/data:/var/lib/postgresql/data"
+
+redis:
+    image: "redis:latest"
+    restart: "unless-stopped"
+
+synapse:
+    image: "matrixdotorg/synapse:latest"
+    restart: "unless-stopped"
+    environment:
+      SYNAPSE_CONFIG_DIR: "/data"
+      SYNAPSE_CONFIG_PATH: "/data/homeserver.yaml"
+      UID: "1000"
+      GID: "1000"
+      TZ: "Europe/London"
+    volumes:
+      - "./data/matrix/synapse:/data"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.synapse.loadbalancer.server.port=8008"
+      - "traefik.http.routers.synapse.rule=Host(`synapse.hackermen.org`)"
+      - "traefik.http.routers.synapse.entrypoints=web-secure"
+      - "traefik.http.routers.synapse.tls.certresolver=letsencrypt"
+
+nginx:
+    image: "nginx:latest"
+    restart: "unless-stopped"
+    volumes:
+      - "./data/matrix/nginx/matrix.conf:/etc/nginx/conf.d/matrix.conf"
+      - ./data/matrix/nginx/www:/var/www/
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.matrix.loadbalancer.server.port=80"
+      - "traefik.http.routers.matrix.rule=Host(`matrix.hackermen.org`)"
+      - "traefik.http.routers.matrix.entrypoints=web-secure"
+      - "traefik.http.routers.matrix.tls.certresolver=letsencrypt"
+
+riot:
+    image: "vectorim/riot-web:latest"
+    volumes:
+      - "./data/matrix/riot/config.json:/app/config.json:ro"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.riot.loadbalancer.server.port=80"
+      - "traefik.http.routers.riot.rule=Host(`chat.hackermen.org`)"
+      - "traefik.http.routers.riot.entrypoints=web-secure"
+      - "traefik.http.routers.riot.tls.certresolver=letsencrypt"
