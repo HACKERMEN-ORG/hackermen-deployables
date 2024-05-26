@@ -10,6 +10,14 @@ Use Ansible to automate the deployment and long term support of required infrast
 
 All services to be deployed will be a docker-compose config file. To intergrate the docker service into the Traefik reverse proxy add the appropriate labels
 
+### Set environment variable
+Before deployment the following environment variables need to be set:
+
+Set traefik auth password by generating a hashed password with htpassword
+`TRAEFIK_DASHBOARD_CREDENTIALS=admin:$apr1$3fqolv60$K8PEqP851OAEcBuRNYaxU1`
+
+Set Cloudflare API Token (see below)
+`CF_DNS_API_TOKEN=123`
 
 #### Docker-compose services
 ```
@@ -62,4 +70,8 @@ Ensure that the docker-compose has the appropriate Traefik labels as mentioned e
 Deploy the playbook with the following:
 `ansible-playbook playbook.yml`
 
+### CURRENT STATUS
+The ansible playbook successfully deploys Traefik and automatically routes and provides SSL certs for the docker-compose files with the appropriate traefik labels. Current docker-compose services include Organizr, FocalBoard, and further configuration is required for Matrix/Synapse, Mailu web mail, and Gitea db.
+
+`[ WORK IN PROGRESS ]` 
 
