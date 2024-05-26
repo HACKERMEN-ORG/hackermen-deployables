@@ -21,3 +21,8 @@ services:
       - ROUNDCUBEMAIL_SKIN=elastic
       - ROUNDCUBEMAIL_DEFAULT_HOST=tls://mail.example.org
       - ROUNDCUBEMAIL_SMTP_SERVER=tls://mail.example.org
+    networks:
+      - proxy
+networks:
+  proxy:
+    external: true
