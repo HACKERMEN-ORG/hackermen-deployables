@@ -44,9 +44,9 @@
         project_src: ./docker/synapse/
         state: present
     
-    - name: Deploy mailu          #Email and web client
+    - name: Deploy roundcube          #Email and web client
       docker_compose:
-        project_src: ./docker/mailu/
+        project_src: ./docker/roundcube/
         state: present
     
     - name: Deploy myBB forum
