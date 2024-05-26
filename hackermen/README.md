@@ -70,4 +70,8 @@ Ensure that the docker-compose has the appropriate Traefik labels as mentioned e
 Deploy the playbook with the following:
 `ansible-playbook playbook.yml`
 
+### CURRENT STATUS
+The ansible playbook successfully deploys Traefik and automatically routes and provides SSL certs for the docker-compose files with the appropriate traefik labels. Current docker-compose services include Organizr, FocalBoard, and further configuration is required for Matrix/Synapse, Mailu web mail, and Gitea db.
+
+`[ WORK IN PROGRESS ]` 
 
