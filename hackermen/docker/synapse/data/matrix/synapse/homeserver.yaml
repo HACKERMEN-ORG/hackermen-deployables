@@ -3,9 +3,9 @@ server_name: "matrix.example.com"
 
 pid_file: /data/homeserver.pid
 
-web_client_location: https://riot.example.com/
+web_client_location: https://chat.system.exposed/
 
-public_baseurl: https://synapse.example.com/
+public_baseurl: https://synapse.system.exposed/
 
 report_stats: true
 
@@ -45,7 +45,7 @@ database:
     cp_min: 5
     cp_max: 10
 
-log_config: "/data/matrix.example.com.log.config"
+log_config: "/data/matrix.system.exposed.log.config"
 
 media_store_path: "/data/media_store"
 
@@ -55,7 +55,7 @@ macaroon_secret_key: "abc"
 
 form_secret: "abc"
 
-signing_key_path: "/data/matrix.example.com.signing.key"
+signing_key_path: "/data/matrix.system.exposed.signing.key"
 
 trusted_key_servers:
   - server_name: "matrix.org"

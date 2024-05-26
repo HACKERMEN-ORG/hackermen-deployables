@@ -24,9 +24,9 @@ synapse:
     labels:
       - "traefik.enable=true"
       - "traefik.http.services.synapse.loadbalancer.server.port=8008"
-      - "traefik.http.routers.synapse.rule=Host(`synapse.hackermen.org`)"
-      - "traefik.http.routers.synapse.entrypoints=web-secure"
-      - "traefik.http.routers.synapse.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.synapse.rule=Host(`synapse.system.exposed`)"
+      - "traefik.http.routers.synapse.entrypoints=https"
+      - "traefik.http.routers.synapse.tls.certresolver=cloudflare"
 
 nginx:
     image: "nginx:latest"
@@ -37,9 +37,9 @@ nginx:
     labels:
       - "traefik.enable=true"
       - "traefik.http.services.matrix.loadbalancer.server.port=80"
-      - "traefik.http.routers.matrix.rule=Host(`matrix.hackermen.org`)"
-      - "traefik.http.routers.matrix.entrypoints=web-secure"
-      - "traefik.http.routers.matrix.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.matrix.rule=Host(`matrix.system.exposed`)"
+      - "traefik.http.routers.matrix.entrypoints=https"
+      - "traefik.http.routers.matrix.tls.certresolver=cloudflare"
 
 riot:
     image: "vectorim/riot-web:latest"
@@ -48,6 +48,6 @@ riot:
     labels:
       - "traefik.enable=true"
       - "traefik.http.services.riot.loadbalancer.server.port=80"
-      - "traefik.http.routers.riot.rule=Host(`chat.hackermen.org`)"
-      - "traefik.http.routers.riot.entrypoints=web-secure"
-      - "traefik.http.routers.riot.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.riot.rule=Host(`chat.system.exposed`)"
+      - "traefik.http.routers.riot.entrypoints=https"
+      - "traefik.http.routers.riot.tls.certresolver=cloudflare"
