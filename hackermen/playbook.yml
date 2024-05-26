@@ -33,6 +33,11 @@
         project_src: ./docker/organizr/
         state: present
 
+    - name: Deploy Focalboard
+      docker_compose:
+        project_src: ./docker/focalboard/
+        state: present
+
     ####COMMUNICATION
     - name: Deploy Synapse and Matrix Client   #VOIP, GROUP, DMs
       docker_compose:
