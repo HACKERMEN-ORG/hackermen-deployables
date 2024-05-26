@@ -19,8 +19,9 @@ services:
     environment:
       - ROUNDCUBEMAIL_DB_TYPE=sqlite
       - ROUNDCUBEMAIL_SKIN=elastic
-      - ROUNDCUBEMAIL_DEFAULT_HOST=tls://mail.google.com
-      - ROUNDCUBEMAIL_SMTP_SERVER=tls://smtp.gmail.com
+      - ROUNDCUBEMAIL_DEFAULT_HOST=ssl://imap.gmail.com:993
+      - ROUNDCUBEMAIL_SMTP_SERVER=ssl://smtp.gmail.com
+      - ROUNDCUBEMAIL_SMTP_PORT=465
     networks:
       - proxy
 networks:
