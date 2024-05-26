@@ -21,3 +21,6 @@ services:
             - TZ=<timezone>
         networks:
             - proxy
+networks:
+  proxy:
+    external: true
