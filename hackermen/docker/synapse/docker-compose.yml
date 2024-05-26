@@ -1,6 +1,8 @@
 postgres:
     image: "postgres:9.6"
     restart: "unless-stopped"
+    networks:
+      - proxy
     environment:
       POSTGRES_PASSWORD: "admin"
     volumes:
@@ -8,11 +10,15 @@ postgres:
 
 redis:
     image: "redis:latest"
+    networks:
+      - proxy
     restart: "unless-stopped"
 
 synapse:
     image: "matrixdotorg/synapse:latest"
     restart: "unless-stopped"
+    networks:
+      - proxy
     environment:
       SYNAPSE_CONFIG_DIR: "/data"
       SYNAPSE_CONFIG_PATH: "/data/homeserver.yaml"
@@ -31,6 +37,8 @@ synapse:
 nginx:
     image: "nginx:latest"
     restart: "unless-stopped"
+    networks:
+      - proxy
     volumes:
       - "./data/matrix/nginx/matrix.conf:/etc/nginx/conf.d/matrix.conf"
       - ./data/matrix/nginx/www:/var/www/
@@ -43,6 +51,8 @@ nginx:
 
 element:
     image: "vectorim/element-web:latest"
+    networks:
+      - proxy
     volumes:
       - "./data/matrix/element/config.json:/app/config.json:ro"
     labels:
@@ -51,3 +61,7 @@ element:
       - "traefik.http.routers.element.rule=Host(`chat.system.exposed`)"
       - "traefik.http.routers.element.entrypoints=https"
       - "traefik.http.routers.element.tls.certresolver=cloudflare"
+
+networks:
+  proxy:
+    external: true
