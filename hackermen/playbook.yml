@@ -52,8 +52,8 @@
 
   ####DEVELOPMENT
     - name: Deploy Gitea
-        docker_compose:
-          project_src: ./docker/gitea/
-          state: present
+      docker_compose:
+        project_src: ./docker/gitea/
+        state: present
 
   

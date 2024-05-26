@@ -6,10 +6,18 @@ services:
         image: organizr/organizr:latest
         restart: unless-stopped
         ports:
-            - 80:80
+            - 8081:80
+        labels:
+            - "traefik.enable=true"
+            - "traefik.http.routers.focalboard.rule=Host(`system.exposed`)"
+            - "traefik.http.routers.focalboard.entrypoints=https"
+            - "traefik.http.routers.focalboard.tls=true"
+            - "traefik.http.services.focalboard.loadbalancer.server.port=8000"
         volumes:
-            - <path to data>:/config
+            - .:/config
         environment:
             - PUID=<uid>
             - PGID=<gid>
             - TZ=<timezone>
+        networks:
+            - proxy
