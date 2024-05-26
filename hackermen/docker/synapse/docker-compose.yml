@@ -1,68 +1,69 @@
 verison: "3.8"
 
-postgres:
-    image: "postgres:9.6"
-    restart: "unless-stopped"
-    networks:
-      - proxy
-    environment:
-      POSTGRES_PASSWORD: "admin"
-    volumes:
-      - "./data/postgres/data:/var/lib/postgresql/data"
+services:
+  postgres:
+      image: "postgres:9.6"
+      restart: "unless-stopped"
+      networks:
+        - proxy
+      environment:
+        POSTGRES_PASSWORD: "admin"
+      volumes:
+        - "./data/postgres/data:/var/lib/postgresql/data"
 
-redis:
-    image: "redis:latest"
-    networks:
-      - proxy
-    restart: "unless-stopped"
+  redis:
+      image: "redis:latest"
+      networks:
+        - proxy
+      restart: "unless-stopped"
 
-synapse:
-    image: "matrixdotorg/synapse:latest"
-    restart: "unless-stopped"
-    networks:
-      - proxy
-    environment:
-      SYNAPSE_CONFIG_DIR: "/data"
-      SYNAPSE_CONFIG_PATH: "/data/homeserver.yaml"
-      UID: "1000"
-      GID: "1000"
-      TZ: "Europe/London"
-    volumes:
-      - "./data/matrix/synapse:/data"
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.services.synapse.loadbalancer.server.port=8008"
-      - "traefik.http.routers.synapse.rule=Host(`synapse.system.exposed`)"
-      - "traefik.http.routers.synapse.entrypoints=https"
-      - "traefik.http.routers.synapse.tls.certresolver=cloudflare"
+  synapse:
+      image: "matrixdotorg/synapse:latest"
+      restart: "unless-stopped"
+      networks:
+        - proxy
+      environment:
+        SYNAPSE_CONFIG_DIR: "/data"
+        SYNAPSE_CONFIG_PATH: "/data/homeserver.yaml"
+        UID: "1000"
+        GID: "1000"
+        TZ: "Europe/London"
+      volumes:
+        - "./data/matrix/synapse:/data"
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.services.synapse.loadbalancer.server.port=8008"
+        - "traefik.http.routers.synapse.rule=Host(`synapse.system.exposed`)"
+        - "traefik.http.routers.synapse.entrypoints=https"
+        - "traefik.http.routers.synapse.tls.certresolver=cloudflare"
 
-nginx:
-    image: "nginx:latest"
-    restart: "unless-stopped"
-    networks:
-      - proxy
-    volumes:
-      - "./data/matrix/nginx/matrix.conf:/etc/nginx/conf.d/matrix.conf"
-      - ./data/matrix/nginx/www:/var/www/
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.services.matrix.loadbalancer.server.port=80"
-      - "traefik.http.routers.matrix.rule=Host(`matrix.system.exposed`)"
-      - "traefik.http.routers.matrix.entrypoints=https"
-      - "traefik.http.routers.matrix.tls.certresolver=cloudflare"
+  nginx:
+      image: "nginx:latest"
+      restart: "unless-stopped"
+      networks:
+        - proxy
+      volumes:
+        - "./data/matrix/nginx/matrix.conf:/etc/nginx/conf.d/matrix.conf"
+        - ./data/matrix/nginx/www:/var/www/
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.services.matrix.loadbalancer.server.port=80"
+        - "traefik.http.routers.matrix.rule=Host(`matrix.system.exposed`)"
+        - "traefik.http.routers.matrix.entrypoints=https"
+        - "traefik.http.routers.matrix.tls.certresolver=cloudflare"
 
-element:
-    image: "vectorim/element-web:latest"
-    networks:
-      - proxy
-    volumes:
-      - "./data/matrix/element/config.json:/app/config.json:ro"
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.services.element.loadbalancer.server.port=80"
-      - "traefik.http.routers.element.rule=Host(`chat.system.exposed`)"
-      - "traefik.http.routers.element.entrypoints=https"
-      - "traefik.http.routers.element.tls.certresolver=cloudflare"
+  element:
+      image: "vectorim/element-web:latest"
+      networks:
+        - proxy
+      volumes:
+        - "./data/matrix/element/config.json:/app/config.json:ro"
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.services.element.loadbalancer.server.port=80"
+        - "traefik.http.routers.element.rule=Host(`chat.system.exposed`)"
+        - "traefik.http.routers.element.entrypoints=https"
+        - "traefik.http.routers.element.tls.certresolver=cloudflare"
 
 networks:
   proxy:
