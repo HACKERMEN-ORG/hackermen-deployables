@@ -1,5 +1,5 @@
 # data/matrix/synapse/homeserver.yaml
-server_name: "matrix.example.com"
+server_name: "matrix.system.exposed"
 
 pid_file: /data/homeserver.pid
 

@@ -1,7 +1,7 @@
 {
     "default_server_config": {
       "m.homeserver": {
-        "base_url": "https://matrix.systeme.exposed",
+        "base_url": "https://matrix.system.exposed",
         "server_name": "matrix.system.exposed"
       },
       "m.identity_server": {
