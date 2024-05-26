@@ -12,7 +12,7 @@ services:
       - 9002:80
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.organizr.rule=Host(`system.exposed`)"
+      - "traefik.http.routers.organizr.rule=Host(`mail.system.exposed`)"
       - "traefik.http.routers.organizr.entrypoints=https"
       - "traefik.http.routers.organizr.tls=true"
       - "traefik.http.services.organizr.loadbalancer.server.port=80"
