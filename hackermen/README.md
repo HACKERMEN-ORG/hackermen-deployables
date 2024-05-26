@@ -12,7 +12,7 @@ All services to be deployed will be a docker-compose config file. To intergrate 
 
 
 #### Docker-compose services
-'''
+```
 version: "3.8"
 services:
   nginx:
@@ -29,7 +29,7 @@ services:
 networks:
   proxy:
     external: true
-'''
+```
 
 Ensure you have created a docker network and defined it accordingly. The network called "proxy" is used throughout this project.
 
@@ -60,6 +60,6 @@ Adding docker compose services to the ansible playbook is as simple as the follo
 Ensure that the docker-compose has the appropriate Traefik labels as mentioned earlier.
 
 Deploy the playbook with the following:
-'ansible-playbook playbook.yml'
+`ansible-playbook playbook.yml`
 
 
