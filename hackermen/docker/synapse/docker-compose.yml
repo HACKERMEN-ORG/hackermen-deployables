@@ -41,13 +41,13 @@ nginx:
       - "traefik.http.routers.matrix.entrypoints=https"
       - "traefik.http.routers.matrix.tls.certresolver=cloudflare"
 
-riot:
-    image: "vectorim/riot-web:latest"
+element:
+    image: "vectorim/element-web:latest"
     volumes:
-      - "./data/matrix/riot/config.json:/app/config.json:ro"
+      - "./data/matrix/element/config.json:/app/config.json:ro"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.services.riot.loadbalancer.server.port=80"
-      - "traefik.http.routers.riot.rule=Host(`chat.system.exposed`)"
-      - "traefik.http.routers.riot.entrypoints=https"
-      - "traefik.http.routers.riot.tls.certresolver=cloudflare"
+      - "traefik.http.services.element.loadbalancer.server.port=80"
+      - "traefik.http.routers.element.rule=Host(`chat.system.exposed`)"
+      - "traefik.http.routers.element.entrypoints=https"
+      - "traefik.http.routers.element.tls.certresolver=cloudflare"
