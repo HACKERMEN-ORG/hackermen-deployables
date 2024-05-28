@@ -82,6 +82,11 @@
         project_src: ./docker/drawio/
         state: present
 
+    - name: Deploy Draw.io
+      docker_compose:
+        project_src: ./docker/onlyoffice/
+        state: present
+
   ####FINANCIAL
   #  - name: Deploy SnipeIT
   #    docker_compose:
