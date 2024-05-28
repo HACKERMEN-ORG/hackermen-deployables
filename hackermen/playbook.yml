@@ -65,10 +65,13 @@
         project_src: ./docker/gitea/
         state: present
 
+    - name: Deploy VS Code server
+      docker_compose:
+        project_src: ./docker/vscode/
+        state: present
   ####FINANCIAL
   #  - name: Deploy SnipeIT
   #    docker_compose:
   #      project_src: ./docker/snipeit/
   #      state: present
 
-  
