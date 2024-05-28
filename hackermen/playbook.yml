@@ -67,8 +67,8 @@
 
   ####FINANCIAL
     - name: Deploy SnipeIT
-        docker_compose:
-          project_src: ./docker/snipeit/
-          state: present
+      docker_compose:
+        project_src: ./docker/snipeit/
+        state: present
 
   
