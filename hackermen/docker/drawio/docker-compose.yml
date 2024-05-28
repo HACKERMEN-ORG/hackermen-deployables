@@ -15,10 +15,10 @@ services:
       COUNTRY_CODE: country
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.freshrss.rule=Host(`draw.system.exposed`)"
-      - "traefik.http.routers.freshrss.entrypoints=https"
-      - "traefik.http.routers.freshrss.tls=true"
-      - "traefik.http.services.freshrss.loadbalancer.server.port=80"
+      - "traefik.http.routers.drawio.rule=Host(`draw.system.exposed`)"
+      - "traefik.http.routers.drawio.entrypoints=https"
+      - "traefik.http.routers.drawio.tls=true"
+      - "traefik.http.services.drawio.loadbalancer.server.port=80"
     networks:
       - proxy
 networks:
