@@ -5,7 +5,7 @@ services:
     container_name: drawio
     restart: unless-stopped
     ports:
-      - 8086:80
+      - 8123:80
     environment:
       PUBLIC_DNS: domain
       ORGANISATION_UNIT: unit
