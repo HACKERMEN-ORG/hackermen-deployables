@@ -33,7 +33,7 @@ services:
        - "traefik.http.routers.onlyoffice.rule=Host(`office.system.exposed`)"
        - "traefik.http.routers.onlyoffice.entrypoints=https"
        - "traefik.http.routers.onlyoffice.tls=true"
-      networks:
+    networks:
        - proxy
        
   onlyoffice-rabbitmq:
