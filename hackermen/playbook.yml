@@ -82,7 +82,7 @@
         project_src: ./docker/drawio/
         state: present
 
-    - name: Deploy Draw.io
+    - name: Deploy OnlyOffice
       docker_compose:
         project_src: ./docker/onlyoffice/
         state: present
