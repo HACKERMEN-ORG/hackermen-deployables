@@ -6,8 +6,6 @@ services:
       context: .
       dockerfile: Dockerfile.alpine
     container_name: snipeit
-    ports:
-    - "8098:80"
     volumes:
     - ./storage/logs:/var/www/html/storage/logs
     depends_on:
@@ -20,7 +18,6 @@ services:
     - "traefik.http.routers.snipeit.rule=Host(`snipeit.system.exposed`)"
     - "traefik.http.routers.snipeit.entrypoints=https"
     - "traefik.http.routers.snipeit.tls=true"
-    - "traefik.http.services.snipeit.loadbalancer.server.port=80"
     networks:
     - proxy
 
