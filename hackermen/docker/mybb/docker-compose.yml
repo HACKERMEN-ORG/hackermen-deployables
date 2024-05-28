@@ -7,7 +7,6 @@ services:
       - "traefik.http.routers.mybb.rule=Host(`forum.system.exposed`)"
       - "traefik.http.routers.mybb.entrypoints=https"
       - "traefik.http.routers.mybb.tls=true"
-      - "traefik.http.services.mybb.loadbalancer.server.port=9000"
     networks:
       - proxy
 
