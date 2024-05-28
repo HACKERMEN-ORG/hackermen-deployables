@@ -54,6 +54,10 @@
         project_src: ./docker/mybb/
         state: present
 
+    - name: Deploy FreshRSS
+      docker_compose:
+        project_src: ./docker/freshrss/
+        state: present
 
   ####DEVELOPMENT
     - name: Deploy Gitea
