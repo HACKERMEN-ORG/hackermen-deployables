@@ -15,7 +15,7 @@ services:
     volumes:
       - /path/to/appdata/config:/config
     ports:
-      - 8443:80
+      - 8074:80
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
