@@ -65,4 +65,10 @@
         project_src: ./docker/gitea/
         state: present
 
+  ####FINANCIAL
+    - name: Deploy SnipeIT
+        docker_compose:
+          project_src: ./docker/snipeit/
+          state: present
+
   
