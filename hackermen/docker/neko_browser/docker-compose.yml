@@ -4,6 +4,9 @@ services:
     image: "m1k1o/neko:firefox"
     restart: "unless-stopped"
     shm_size: "2gb"
+    ports:
+      - "8066:80"
+      - "52000-52100:52000-52100/udp"
     environment:
       NEKO_SCREEN: 1920x1080@30
       NEKO_PASSWORD: neko
@@ -15,6 +18,7 @@ services:
       - "traefik.http.routers.neko.rule=Host(`web.system.exposed`)"
       - "traefik.http.routers.neko.entrypoints=https"
       - "traefik.http.routers.neko.tls=true"
+      - "traefik.http.services.freshrss.loadbalancer.server.port=80"
     networks:
       - proxy
 networks:
