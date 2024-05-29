@@ -81,11 +81,16 @@
       docker_compose:
         project_src: ./docker/drawio/
         state: present
-
-    - name: Deploy OnlyOffice
+    
+    - name: Deploy Neko Firefox browser
       docker_compose:
-        project_src: ./docker/onlyoffice/
+        project_src: ./docker/neko_browser/
         state: present
+
+#    - name: Deploy OnlyOffice
+#      docker_compose:
+#        project_src: ./docker/onlyoffice/
+#        state: present
 
   ####FINANCIAL
   #  - name: Deploy SnipeIT

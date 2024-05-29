@@ -1,0 +1,22 @@
+version: "3.4"
+services:
+  neko:
+    image: "m1k1o/neko:firefox"
+    restart: "unless-stopped"
+    shm_size: "2gb"
+    environment:
+      NEKO_SCREEN: 1920x1080@30
+      NEKO_PASSWORD: neko
+      NEKO_PASSWORD_ADMIN: admin
+      NEKO_EPR: 52000-52100
+      NEKO_ICELITE: 1
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.neko.rule=Host(`web.system.exposed`)"
+      - "traefik.http.routers.neko.entrypoints=https"
+      - "traefik.http.routers.neko.tls=true"
+    networks:
+      - proxy
+networks:
+  proxy:
+    external: true
