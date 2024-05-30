@@ -1,4 +1,5 @@
 version: "3.8"
+
 services:
   nginx:
     image: mattermost/focalboard:latest
@@ -7,7 +8,10 @@ services:
       - "traefik.http.routers.focalboard.rule=Host(`board.system.exposed`)"
       - "traefik.http.routers.focalboard.entrypoints=https"
       - "traefik.http.routers.focalboard.tls=true"
-      - "traefik.http.services.focalboard.loadbalancer.server.port=8003"
+      - "traefik.http.services.focalboard.loadbalancer.server.port=8000"
+      - "traefik.http.routers.focalboard.service=focalboard"
+      - "traefik.http.services.focalboard.loadbalancer.server.scheme=http"
+
     networks:
       - proxy
 
