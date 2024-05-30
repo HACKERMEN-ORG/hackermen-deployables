@@ -1,0 +1,36 @@
+version: "3.7"
+
+services:
+  searxng:
+    container_name: searxng
+    image: searxng/searxng:latest
+    networks:
+      - proxy
+    volumes:
+      - ./searxng:/etc/searxng
+    env_file:
+      - .env
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.searxng.rule=Host(`search.system.exposed`)"
+      - "traefik.http.routers.searxng.tls=true"
+      - "traefik.http.routers.searxng.service=searxng-svc"
+      - "traefik.http.services.searxng-svc.loadbalancer.server.port=8089"
+      - "traefik.http.routers.searxng.tls.certresolver=cloudflare"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1m"
+        max-file: "1"
+    restart: always
+
+  redis:
+    image: "redis:alpine"
+    command: redis-server --save "" --appendonly "no"
+    tmpfs:
+      - /var/lib/redis
+    restart: always
+
+networks:
+  proxy:
+    external: true

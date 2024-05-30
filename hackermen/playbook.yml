@@ -87,6 +87,11 @@
         project_src: ./docker/neko_browser/
         state: present
 
+    - name: Deploy SearxNG
+      docker_compose:
+        project_src: ./docker/searxng/
+        state: present
+
 #    - name: Deploy OnlyOffice
 #      docker_compose:
 #        project_src: ./docker/onlyoffice/
