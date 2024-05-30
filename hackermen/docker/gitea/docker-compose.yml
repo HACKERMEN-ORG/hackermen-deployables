@@ -19,3 +19,6 @@ services:
       - "traefik.http.routers.gitea.rule=Host(`git.system.exposed`)"
       - "traefik.http.routers.gitea.entrypoints=https"
       - "traefik.http.routers.gitea.tls=true"
+networks:
+  proxy:
+    external: true
