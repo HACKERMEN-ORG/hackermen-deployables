@@ -26,6 +26,8 @@ services:
       - "traefik.http.routers.linkwarden.service=linkwarden-svc"
       - "traefik.http.services.linkwarden-svc.loadbalancer.server.port=3000"
       - "traefik.http.routers.linkwarden.tls.certresolver=cloudflare"
+    networks:
+      - proxy
 networks:
   proxy:
     external: true
