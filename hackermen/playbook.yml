@@ -91,6 +91,11 @@
       docker_compose:
         project_src: ./docker/searxng/
         state: present
+    
+    - name: Deploy TimeTagger
+      docker_compose:
+        project_src: ./docker/timetagger/
+        state: present
 
 #    - name: Deploy OnlyOffice
 #      docker_compose:
