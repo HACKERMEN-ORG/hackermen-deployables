@@ -101,6 +101,11 @@
       docker_compose:
         project_src: ./docker/linkwarden/
         state: present
+    
+    - name: Deploy Stirling-PDF
+      docker_compose:
+        project_src: ./docker/stirlingpdf/
+        state: present
 
 #    - name: Deploy OnlyOffice
 #      docker_compose:
