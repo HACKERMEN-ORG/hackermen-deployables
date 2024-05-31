@@ -2,7 +2,7 @@
     "domain": "https://pass.system.exposed",
     "sends_allowed": true,
     "disable_icon_download": false,
-    "signups_allowed": false,
+    "signups_allowed": true,
     "signups_verify": false,
     "signups_verify_resend_time": 3600,
     "signups_verify_resend_limit": 6,
