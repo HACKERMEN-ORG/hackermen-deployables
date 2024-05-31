@@ -15,7 +15,7 @@ services:
       - "traefik.http.routers.searxng.rule=Host(`search.system.exposed`)"
       - "traefik.http.routers.searxng.tls=true"
       - "traefik.http.routers.searxng.service=searxng-svc"
-      - "traefik.http.services.searxng-svc.loadbalancer.server.port=8089"
+      - "traefik.http.services.searxng-svc.loadbalancer.server.port=8080"
       - "traefik.http.routers.searxng.tls.certresolver=cloudflare"
     logging:
       driver: "json-file"
