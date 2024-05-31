@@ -97,6 +97,11 @@
         project_src: ./docker/timetagger/
         state: present
 
+    - name: Deploy LinkWarden
+      docker_compose:
+        project_src: ./docker/linkwarden/
+        state: present
+
 #    - name: Deploy OnlyOffice
 #      docker_compose:
 #        project_src: ./docker/onlyoffice/
