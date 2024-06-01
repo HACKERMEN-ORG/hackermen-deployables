@@ -26,6 +26,8 @@ services:
      - "traefik.http.routers.vaultwarden.entrypoints=https"
      - "traefik.http.routers.vaultwarden.tls=true"
      - "traefik.http.services.vaultwarden.loadbalancer.server.port=80"
+     - "traefik.frontend.headers.customFrameOptionsValue=allow-from https://system.exposed"
+     - "traefik.frontend.passHostHeader=true"
     networks:
       - proxy
 

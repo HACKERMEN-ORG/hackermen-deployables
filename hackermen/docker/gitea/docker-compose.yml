@@ -22,6 +22,8 @@ services:
       - "traefik.http.services.gitea.loadbalancer.server.port=3000"  # Route to port 3000 inside the container
       - "traefik.http.routers.gitea.service=gitea"
       - "traefik.http.services.gitea.loadbalancer.server.scheme=http"  # HTTP inside the container
+      - "traefik.frontend.headers.customFrameOptionsValue=allow-from https://system.exposed"
+      - "traefik.frontend.passHostHeader=true"
 
 networks:
   proxy:
