@@ -10,6 +10,7 @@
 services:
     archivebox:
         image: archivebox/archivebox:latest
+        env_file: ../../.env.hosts
         ports:
             - 8725:8000
         volumes:

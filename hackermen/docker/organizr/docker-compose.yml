@@ -4,12 +4,13 @@ services:
         container_name: organizr
         hostname: organizr
         image: organizr/organizr:latest
+        env_file: ../../.env.hosts
         restart: unless-stopped
         ports:
             - 8086:80
         labels:
             - "traefik.enable=true"
-            - "traefik.http.routers.organizr.rule=Host(`system.exposed`)"
+            - "traefik.http.routers.organizr.rule=Host(`${}`)"
             - "traefik.http.routers.organizr.entrypoints=https"
             - "traefik.http.routers.organizr.tls=true"
             - "traefik.http.services.organizr.loadbalancer.server.port=80"
