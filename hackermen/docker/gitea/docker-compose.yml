@@ -22,8 +22,11 @@ services:
       - "traefik.http.services.gitea.loadbalancer.server.port=3000"  # Route to port 3000 inside the container
       - "traefik.http.routers.gitea.service=gitea"
       - "traefik.http.services.gitea.loadbalancer.server.scheme=http"  # HTTP inside the container
-      - "traefik.frontend.headers.customFrameOptionsValue=allow-from https://system.exposed"
-      - "traefik.frontend.passHostHeader=true"
+      #- "traefik.http.middlewares.gitea.headers.customrequestheaders.customFrameOptionsValue=ALLOW"
+      - "traefik.http.middlewares.gitea-csp.headers.customResponseHeaders.Content-Security-Policy=frame-ancestor 'self' https://system.exposed;"
+      # Attach the middleware to the router
+      - "traefik.http.routers.gitea.middlewares=gitea-csp"
+      #- "traefik.http.routers.gitea.middlewares=allow-iframe"
 
 networks:
   proxy:

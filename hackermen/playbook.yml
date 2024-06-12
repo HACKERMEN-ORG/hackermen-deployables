@@ -28,6 +28,11 @@
 
 
     #INFRASTRUCTURE
+    - name: Deploy Authentik
+      docker_compose:
+        project_src: ./docker/authentik/
+        state: present 
+
     - name: Deploy Organizr              #DASHBOARD
       docker_compose:
         project_src: ./docker/organizr/
