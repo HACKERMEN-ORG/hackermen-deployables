@@ -1,0 +1,23 @@
+version: "3"
+services:
+
+  online-go:
+    build: .
+    image: online-go
+    container_name: online-go
+    ports:
+      - "8089:8089"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.online-go.rule=Host('go.system.exposed')"
+      - "traefik.http.routers.online-go.entrypoints=https"
+      - "traefik.http.routers.online-go.tls=true"
+      - "traefik.http.services.online-go.loadbalancer.server.port=8089"
+      - "traefik.http.routers.online-go.service=online-go"
+      - "traefik.http.services.online-go.loadbalancer.server.scheme=http"
+    networks:
+      - proxy
+
+networks:
+  proxy:
+    external: true

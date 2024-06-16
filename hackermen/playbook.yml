@@ -111,6 +111,11 @@
       docker_compose:
         project_src: ./docker/stirlingpdf/
         state: present
+
+    - name: Deploy Go-Online
+      docker-compose:
+        project_src: ./docker/go-online/
+        state: present
     
     - name: Deploy ArchiveBox
       docker_compose:
