@@ -28,7 +28,7 @@
 
 
     #INFRASTRUCTURE
-    - name: Deploy Authentik
+    - name: Deploy Authentik            #AUTH AND SSO
       docker_compose:
         project_src: ./docker/authentik/
         state: present 
@@ -38,12 +38,17 @@
         project_src: ./docker/organizr/
         state: present
 
-    - name: Deploy Focalboard
-      docker_compose:
-        project_src: ./docker/focalboard/
-        state: present
+      ##Uptime Kuma - uptime monitor
+      ##Portainer - docker container automate
+      ##OliveTin - give access to commands to less technical people https://www.olivetin.app
+      ##dockge - portainer but lighter
+      ##Yacht - one click deployment for docker containers
+      ##Crowdsec - security solution
+      ##Plausibe / Umami - google analytics clone, or Open Web analytics / Matomo (more features)
 
-    
+####DATABASES & VISUALIZATION
+    ##InfluxDB, Prometheus, Graphana
+
 
     ####COMMUNICATION
     - name: Deploy Synapse and Matrix Client   #VOIP, GROUP, DMs
@@ -56,71 +61,125 @@
         project_src: ./docker/roundcube/
         state: present
     
-    - name: Deploy myBB forum
-      docker_compose:
-        project_src: ./docker/mybb/
-        state: present
-
-    - name: Deploy FreshRSS
-      docker_compose:
-        project_src: ./docker/freshrss/
-        state: present
-
   ####DEVELOPMENT
-    - name: Deploy Gitea
+    - name: Deploy Gitea             #git server
       docker_compose:
         project_src: ./docker/gitea/
         state: present
 
-    - name: Deploy VS Code server
+    - name: Deploy VS Code server    #shared VS Code IDE in real time
       docker_compose:
         project_src: ./docker/vscode/
         state: present
 
-    - name: Deploy VaultWarden password manager
-      docker_compose:
-        project_src: ./docker/vaultwarden/
-        state: present
+        ##WEBTOP - desktop environments in the web browser    // or puter.com
+        ##PENPOT - ui/ux design
+        ##PEPPERMINT - ticket management
 
-    - name: Deploy Draw.io
-      docker_compose:
-        project_src: ./docker/drawio/
-        state: present
-    
-    - name: Deploy Neko Firefox browser
-      docker_compose:
-        project_src: ./docker/neko_browser/
-        state: present
+####GROUPWARE & TASK MANAGEMENT
 
-    - name: Deploy SearxNG
+##PLANE - Jira Clone
+##Vikunja - better FocalBoard
+##Rallly - group event scheduling and polls  https://support.rallly.co/self-hosting/docker-compose
+
+####OFFICE TOOLS
+    - name: Deploy SearxNG               #Search engine
       docker_compose:
         project_src: ./docker/searxng/
-        state: present
-    
-    - name: Deploy TimeTagger
-      docker_compose:
-        project_src: ./docker/timetagger/
-        state: present
+        state: present    
 
-    - name: Deploy LinkWarden
+    - name: Deploy Draw.io               #Diagram editor
       docker_compose:
-        project_src: ./docker/linkwarden/
-        state: present
+        project_src: ./docker/drawio/
+        state: present   
     
-    - name: Deploy Stirling-PDF
+    - name: Deploy Stirling-PDF          #PDF Editor
       docker_compose:
         project_src: ./docker/stirlingpdf/
         state: present
-    
-    - name: Deploy go-online
+
+    ##nextCloud - google drive clone
+    ##papreless-ngx - scan physial documents https://github.com/paperless-ngx/paperless-ngx
+    ##EXCALIDRAW - shared whiteboard with AI features
+
+####UTILITIES
+    - name: Deploy VaultWarden password manager    #Password Manager
       docker_compose:
-        project_src: ./docker/go-online/
+        project_src: ./docker/vaultwarden/
         state: present
-    
-    - name: Deploy ArchiveBox
+  ##Slash - link shortener
+  ##FileFlows - file converter processor / encoder
+  ##Password pusher - https://pwpush.com/?ref=selfh.st
+####ARCHIVING AND AGGREGATION
+    - name: Deploy FreshRSS     ## NEEDS FURTHER CONFIGURATIONS
       docker_compose:
-        project_src: ./docker/archivebox/
+        project_src: ./docker/freshrss/
         state: present
+
+  ##linkwarden - bookmarks collaborative    -- maybe use commafeed instead
+  ##calibre-web - books
+  ##pinchflat - yt download archive
+  ##duplicati - encrypted cloud backups for personal files
+
+####FINANCE AND INVENTORY MANAGEMENT
+
+##maybe - https://github.com/maybe-finance/maybe - personal budgeting
+##Big Capital - business accounting
+##LubeLogger - vehicle management
+##WallOS - subscription management
+
+
+##AI
+
+##https://github.com/SecureAI-Tools/SecureAI-Tools?ref=selfh.st
+
+
+
+
+####PERSONAL LOGGING
+  ##EXERCISE DIARY - https://github.com/aceberg/ExerciseDiary
+  ##CALORIFIC - https://github.com/xdpirate/calorific
+####WORKING
+
+#    - name: Deploy Focalboard
+#      docker_compose:
+#        project_src: ./docker/focalboard/
+#        state: present
+
+#    - name: Deploy Neko Firefox browser     ###THIS IS CURRENTLY HOSTED ON AN EXTERNAL SERVER
+#      docker_compose:
+#        project_src: ./docker/neko_browser/
+#        state: present
+
+
+###WORKING DEMO REQUIRES FURTHER CONFIGURATION
+
+#    - name: Deploy TimeTagger
+#      docker_compose:
+#        project_src: ./docker/timetagger/
+#        state: present
+
+###CONFIGURATION NEEDS FIXED
+
+#    - name: Deploy myBB forum                 ##FASTCGI FIX
+#      docker_compose: 
+#        project_src: ./docker/mybb/
+#        state: present
+
+#    - name: Deploy LinkWarden
+#      docker_compose:
+#        project_src: ./docker/linkwarden/
+#        state: present
+
+#    - name: Deploy ArchiveBox
+#      docker_compose:
+#        project_src: ./docker/archivebox/
+#        state: present
+
+#    - name: Deploy go-online
+#      docker_compose:
+#        project_src: ./docker/go-online/
+#        state: present
 
 #    - name: Deploy OnlyOffice
 #      docker_compose:
