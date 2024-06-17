@@ -17,26 +17,25 @@ services:
       - keys:/root/.aspnet/DataProtection-Keys
     # expose port and/or use serving via traefik
     ports:
-      - 8080:8080
+      - 8085:8085
     env_file:
       - .env
-    # traefik configurations, including networks can be commented out if not needed
-    networks:
-      - traefik-ingress
     labels:
-      ## Traefik General
-      # We set 'enable by default' to false, so this tells Traefik we want it to connect here
-      traefik.enable: true
-      # define network for traefik<>app communication
-      traefik.docker.network: traefik-ingress
-      ## HTTP Routers
-      traefik.http.routers.whoami.entrypoints: https
-      traefik.http.routers.whoami.rule: Host(`lubelog.mydomain.tld`)
-      ## Middlewares
-      #traefik.http.routers.whoami.middlewares: authentik@docker
-      # none
-      ## HTTP Services
-      traefik.http.services.whoami.loadbalancer.server.port: 5000
+      - "traefik.enable=true"
+      - "traefik.http.routers.lubelog.rule=Host(`auto.system.exposed`)"
+      - "traefik.http.routers.lubelog.entrypoints=https"
+      - "traefik.http.routers.lubelog.tls=true"
+      - "traefik.http.services.lubelog.loadbalancer.server.port=8085"  # Route to port 8000 inside the container
+      - "traefik.http.routers.lubelog.service=lubelog"
+      - "traefik.http.services.lubelog.loadbalancer.server.scheme=http"  # HTTP inside the container
+
+    networks:
+      - proxy
+
+networks:
+  proxy:
+    external: true
+
 
 volumes:
   config:
@@ -47,7 +46,3 @@ volumes:
   temp:
   log:
   keys:
-
-networks:
-  traefik-ingress:
-    external: true

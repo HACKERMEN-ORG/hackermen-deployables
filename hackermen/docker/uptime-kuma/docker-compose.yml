@@ -4,6 +4,21 @@ services:
     volumes:
       - ./data:/app/data
     ports:
-      # <Host Port>:<Container Port>
+   #   # <Host Port>:<Container Port>
       - 3001:3001
     restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.uptime-kuma.rule=Host(`uptime.system.exposed`)"
+      - "traefik.http.routers.uptime-kuma.entrypoints=https"
+      - "traefik.http.routers.uptime-kuma.tls=true"
+      - "traefik.http.services.uptime-kuma.loadbalancer.server.port=3001"  # Route to port 8000 inside the container
+      - "traefik.http.routers.uptime-kuma.service=uptime-kuma"
+      - "traefik.http.services.uptime-kuma.loadbalancer.server.scheme=http"  # HTTP inside the container
+
+    networks:
+      - proxy
+
+networks:
+  proxy:
+    external: true    

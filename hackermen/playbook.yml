@@ -38,7 +38,22 @@
         project_src: ./docker/organizr/
         state: present
 
-      ##Uptime Kuma - uptime monitor
+    - name: Deploy Uptime-Kuma              #Uptime logger
+      docker_compose:
+        project_src: ./docker/uptime-kuma/
+        state: present
+    
+    - name: Deploy Dockge              #Docker manager
+      docker_compose:
+        project_src: ./docker/dockge/
+        state: present
+
+    - name: Deploy OliveTin              #command dashboard
+      docker_compose:
+        project_src: ./docker/OliveTin/
+        state: present
+    
+
       ##Portainer - docker container automate
       ##OliveTin - give access to commands to less technical people https://www.olivetin.app
       ##dockge - portainer but lighter
@@ -97,16 +112,27 @@
       docker_compose:
         project_src: ./docker/stirlingpdf/
         state: present
+    
+    - name: Deploy Excalidraw          #Shared whiteboard with AI
+      docker_compose:
+        project_src: ./docker/excalidraw/
+        state: present
 
     ##nextCloud - google drive clone
     ##papreless-ngx - scan physial documents https://github.com/paperless-ngx/paperless-ngx
-    ##EXCALIDRAW - shared whiteboard with AI features
 
 ####UTILITIES
     - name: Deploy VaultWarden password manager    #Password Manager
       docker_compose:
         project_src: ./docker/vaultwarden/
         state: present
+
+    - name: Deploy Slash - links    #Link shortener
+      docker_compose:
+        project_src: ./docker/vaultwarden/
+        state: present
+
+
   ##Slash - link shortener
   ##FileFlows - file converter processor / encoder
   ##Password pusher - https://pwpush.com/?ref=selfh.st
@@ -122,6 +148,12 @@
   ##duplicati - encrypted cloud backups for personal files
 
 ####FINANCE AND INVENTORY MANAGEMENT
+
+- name: Deploy LubeLog     ## NEEDS FURTHER CONFIGURATIONS
+      docker_compose:
+        project_src: ./docker/lubelog/
+        state: present
+
 
 ##maybe - https://github.com/maybe-finance/maybe - personal budgeting
 ##Big Capital - business accounting

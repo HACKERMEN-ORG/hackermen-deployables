@@ -10,3 +10,18 @@ services:
     volumes:
       - /host/path/to/config:/config
       - /host/path/to/downloads:/downloads
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.pinchflat.rule=Host(`yt.system.exposed`)"
+      - "traefik.http.routers.pinchflat.entrypoints=https"
+      - "traefik.http.routers.pinchflat.tls=true"
+      - "traefik.http.services.pinchflat.loadbalancer.server.port=8945"  # Route to port 8000 inside the container
+      - "traefik.http.routers.pinchflat.service=pinchflat"
+      - "traefik.http.services.pinchflat.loadbalancer.server.scheme=http"  # HTTP inside the container
+
+    networks:
+      - proxy
+
+networks:
+  proxy:
+    external: true
