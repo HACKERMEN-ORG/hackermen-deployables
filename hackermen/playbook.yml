@@ -115,7 +115,7 @@
     
     - name: Deploy Excalidraw          #Shared whiteboard with AI
       docker_compose:
-        project_src: ./docker/excalidraw/
+        project_src: ./docker/excalidraw/excalidraw/
         state: present
 
     ##nextCloud - google drive clone
@@ -149,7 +149,7 @@
 
 ####FINANCE AND INVENTORY MANAGEMENT
 
-- name: Deploy LubeLog     ## NEEDS FURTHER CONFIGURATIONS
+    - name: Deploy LubeLog     ## NEEDS FURTHER CONFIGURATIONS
       docker_compose:
         project_src: ./docker/lubelog/
         state: present
