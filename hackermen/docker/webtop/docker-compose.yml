@@ -14,12 +14,28 @@ services:
       - /path/to/data:/config
       - /var/run/docker.sock:/var/run/docker.sock #optional
     ports:
-      - 3000:3000
-      - 3001:3001
+      - 6000:6000
+      - 6001:6001
     devices:
       - /dev/dri:/dev/dri #optional
     shm_size: "1gb" #optional
     restart: unless-stopped
+
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.webtop.rule=Host(`desktop.system.exposed`)"
+      - "traefik.http.routers.webtop.entrypoints=https"
+      - "traefik.http.routers.webtop.tls=true"
+      - "traefik.http.services.webtop.loadbalancer.server.port=6001"  # Route to port 8000 inside the container
+      - "traefik.http.routers.webtop.service=webtop"
+      - "traefik.http.services.webtop.loadbalancer.server.scheme=http"  # HTTP inside the container
+
+    networks:
+      - proxy
+
+networks:
+  proxy:
+    external: true
 
 
 

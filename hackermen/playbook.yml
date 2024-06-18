@@ -98,6 +98,11 @@
 ##Rallly - group event scheduling and polls  https://support.rallly.co/self-hosting/docker-compose
 
 ####OFFICE TOOLS
+    - name: Deploy NextCloud               #Office suite + cloud storage
+      docker_compose:
+        project_src: ./docker/nextcloud/
+        state: present   
+
     - name: Deploy SearxNG               #Search engine
       docker_compose:
         project_src: ./docker/searxng/
