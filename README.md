@@ -82,8 +82,11 @@ Ensure public ssh keys are located on clients
 To run as local host configure yaml config:
 `hosts: <your host> # eg. localhost`
 
+Make docker network proxy
+`docker network create proxy
+
 To run the playbook in your current directory
-`$ ansible-playbook <the configuration you want to run>.yml # etc.`
+`ansible-playbook <the configuration you want to run>.yml # etc.`
 
 DEPLOY!!!
 
