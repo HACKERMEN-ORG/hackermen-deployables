@@ -1,0 +1,21 @@
+version: "3.8"
+
+services:
+  nginx:
+    image: mattermost/focalboard:latest
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.focalboard.rule=Host(`${FOCALBOARD}.${HOSTNAME}`)"
+      - "traefik.http.routers.focalboard.entrypoints=https"
+      - "traefik.http.routers.focalboard.tls=true"
+      - "traefik.http.services.focalboard.loadbalancer.server.port=8000"  # Route to port 8000 inside the container
+      - "traefik.http.routers.focalboard.service=focalboard"
+      - "traefik.http.services.focalboard.loadbalancer.server.scheme=http"  # HTTP inside the container
+    env_file:
+      - ../../.env
+    networks:
+      - proxy
+
+networks:
+  proxy:
+    external: true
