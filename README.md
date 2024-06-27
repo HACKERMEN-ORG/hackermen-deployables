@@ -92,6 +92,19 @@ Add and remove stuff from the playbook as needed to get ansible-playbook to work
 
 DEPLOY!!!
 
-[TO BE CONTINUED] 
+TODO:
 
+Certbot (this needs to be added to ansible playbooks)
+make a service with cerbot
+first, kill docker
+certbot certonly
+re-up docker
 
+daily renewing cronjob
+```
+#!/bin/sh
+docker kill $(docker ps)
+systemctl stop docker
+certbot renew
+systemctl restart docker
+```
