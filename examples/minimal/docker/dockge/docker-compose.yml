@@ -20,14 +20,12 @@ services:
     environment:
       # Tell Dockge where is your stacks directory
       - DOCKGE_STACKS_DIR=/opt/stacks
-      - DOCKGE=${DOCKGE}
-      - HOSTNAME=${HOSTNAME}
     env_file:
       - ../../.env
 
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.dockge.rule=Host(`${DOCKGE}.${HOSTNAME}`)"
+      - "traefik.http.routers.dockge.rule=Host(`$DOCKGE.$HOSTNAME`)"
       - "traefik.http.routers.dockge.entrypoints=https"
       - "traefik.http.routers.dockge.tls=true"
       - "traefik.http.services.dockge.loadbalancer.server.port=5001"  # Route to port 8000 inside the container
