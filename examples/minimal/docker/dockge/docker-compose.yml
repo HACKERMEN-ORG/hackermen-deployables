@@ -20,6 +20,8 @@ services:
     environment:
       # Tell Dockge where is your stacks directory
       - DOCKGE_STACKS_DIR=/opt/stacks
+      - DOCKGE=${DOCKGE}
+      - HOSTNAME=${HOSTNAME}
     env_file:
       - ../../.env
 
