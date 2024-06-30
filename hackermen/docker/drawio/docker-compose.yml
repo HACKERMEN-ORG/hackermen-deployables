@@ -13,7 +13,7 @@ services:
       COUNTRY_CODE: country
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.drawio.rule=Host(`draw.system.exposed`)"
+      - "traefik.http.routers.drawio.rule=Host(`draw.source.directory`)"
       - "traefik.http.routers.drawio.entrypoints=https"
       - "traefik.http.routers.drawio.tls=true"
     networks:
