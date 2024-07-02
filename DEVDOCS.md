@@ -103,3 +103,6 @@ systemctl stop docker
 certbot renew
 systemctl restart docker
 ```
+
+### SSL from inside docker (no cloudflare) solution
+https://doc.traefik.io/traefik/user-guides/docker-compose/acme-tls/
