@@ -1,19 +1,40 @@
 version: "3.8"
 
 services:
-  nginx:
+  focalboard:
     image: mattermost/focalboard:latest
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.focalboard.rule=Host(`board.system.exposed`)"
-      - "traefik.http.routers.focalboard.entrypoints=https"
-      - "traefik.http.routers.focalboard.tls=true"
-      - "traefik.http.services.focalboard.loadbalancer.server.port=8000"  # Route to port 8000 inside the container
-      - "traefik.http.routers.focalboard.service=focalboard"
-      - "traefik.http.services.focalboard.loadbalancer.server.scheme=http"  # HTTP inside the container
-
+    container_name: focalboard
+    restart: unless-stopped
+    volumes:
+      - ./data:/data  # Persistent data storage
+    environment:
+      # Explicitly turn off internal SSL redirects
+      - WEBSERVER_ROOT=/
+      - DISABLE_SSL_REDIRECT=true
     networks:
       - proxy
+    labels:
+      - "traefik.enable=true"
+      
+      # HTTP Router - explicitly handle HTTP
+      - "traefik.http.routers.focalboard-http.rule=Host(`board.brainiac.gg`)"
+      - "traefik.http.routers.focalboard-http.entrypoints=http"
+      
+      # HTTPS Router - for secure connections
+      - "traefik.http.routers.focalboard-secure.rule=Host(`board.brainiac.gg`)"
+      - "traefik.http.routers.focalboard-secure.entrypoints=https"
+      - "traefik.http.routers.focalboard-secure.tls=true"
+      - "traefik.http.routers.focalboard-secure.tls.certresolver=letsencrypt"
+      
+      # Service definition - both routers use the same service
+      - "traefik.http.services.focalboard-service.loadbalancer.server.port=8000"
+      - "traefik.http.routers.focalboard-http.service=focalboard-service"
+      - "traefik.http.routers.focalboard-secure.service=focalboard-service"
+      
+      # Headers to fix SSL/proxy issues
+      - "traefik.http.middlewares.focalboard-headers.headers.customRequestHeaders.X-Forwarded-Proto=https"
+      - "traefik.http.middlewares.focalboard-headers.headers.customRequestHeaders.X-Forwarded-Host=board.brainiac.gg"
+      - "traefik.http.routers.focalboard-secure.middlewares=focalboard-headers"
 
 networks:
   proxy:

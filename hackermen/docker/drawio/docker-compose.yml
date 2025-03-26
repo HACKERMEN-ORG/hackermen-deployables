@@ -1,31 +1,40 @@
-version: '3.5'
+version: "3.8"
+
 services:
   drawio:
     image: jgraph/drawio
     container_name: drawio
     restart: unless-stopped
     environment:
-      PUBLIC_DNS: domain
-      ORGANISATION_UNIT: unit
-      ORGANISATION: org
-      CITY: city
-      STATE: state
-      COUNTRY_CODE: country
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.drawio.rule=Host(`draw.source.directory`)"
-      - "traefik.http.routers.drawio.entrypoints=https"
-      - "traefik.http.routers.drawio.tls=true"
+      - PUBLIC_DNS=draw.brainiac.gg
+      # Disable any internal redirects
+      - DRAWIO_SELF_CONTAINED=1
+      - DRAWIO_BASE_URL=/
     networks:
       - proxy
+    labels:
+      - "traefik.enable=true"
+      
+      # HTTP Router
+      - "traefik.http.routers.drawio-http.rule=Host(`draw.brainiac.gg`)"
+      - "traefik.http.routers.drawio-http.entrypoints=http"
+      
+      # HTTPS Router
+      - "traefik.http.routers.drawio-secure.rule=Host(`draw.brainiac.gg`)"
+      - "traefik.http.routers.drawio-secure.entrypoints=https"
+      - "traefik.http.routers.drawio-secure.tls=true"
+      - "traefik.http.routers.drawio-secure.tls.certresolver=letsencrypt"
+      
+      # Service definition
+      - "traefik.http.services.drawio-service.loadbalancer.server.port=8080"
+      - "traefik.http.routers.drawio-http.service=drawio-service"
+      - "traefik.http.routers.drawio-secure.service=drawio-service"
+      
+      # Headers for SSL/proxy
+      - "traefik.http.middlewares.drawio-headers.headers.customRequestHeaders.X-Forwarded-Proto=https"
+      - "traefik.http.middlewares.drawio-headers.headers.customRequestHeaders.X-Forwarded-Host=draw.brainiac.gg"
+      - "traefik.http.routers.drawio-secure.middlewares=drawio-headers"
+
 networks:
   proxy:
     external: true
-
-
-#    healthcheck:
-#      test: ["CMD-SHELL", "curl -f http://domain:8080 || exit 1"]
-#      interval: 1m30s
-#      timeout: 10s
-#      retries: 5
-#      start_period: 10s

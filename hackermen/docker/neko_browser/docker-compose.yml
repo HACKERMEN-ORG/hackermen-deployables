@@ -1,27 +1,47 @@
-version: "3.4"
+version: "3.8"
+
 services:
   neko:
-    image: "m1k1o/neko:firefox"
-    restart: "unless-stopped"
+    image: m1k1o/neko:firefox
+    container_name: neko-firefox
+    restart: unless-stopped
     shm_size: "2gb"
-    ports:
-      - "8066:8080"
-      - "52000-52100:52000-52100/udp"
     environment:
-      NEKO_SCREEN: 1920x1080@30
-      NEKO_PASSWORD: neko
-      NEKO_PASSWORD_ADMIN: admin
-      NEKO_EPR: 52000-52100
-      NEKO_ICELITE: 1
-      NEKO_NAT1TO1: 10.108.0.3
-
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.neko.rule=Host(`web.system.exposed`)"
-      - "traefik.http.routers.neko.entrypoints=https"
-      - "traefik.http.routers.neko.tls=true"
+      - NEKO_SCREEN=1920x1080@30
+      - NEKO_PASSWORD=neko      # Change this to your desired user password
+      - NEKO_PASSWORD_ADMIN=admin  # Change this to your desired admin password
+      - NEKO_EPR=59000-59100    # WebRTC ports range
+      - NEKO_PROXY=true        # Enable proxy mode
+      - NEKO_PROXY_DISABLE_REDIRECT=true # Disable internal redirects
+    cap_add:
+      - SYS_ADMIN
     networks:
       - proxy
+    ports:
+      - 59000-59100:59000-59100/udp  # WebRTC ports for direct connection
+    labels:
+      - "traefik.enable=true"
+      
+      # HTTP Router
+      - "traefik.http.routers.neko-http.rule=Host(`web.brainiac.gg`)"
+      - "traefik.http.routers.neko-http.entrypoints=http"
+      
+      # HTTPS Router
+      - "traefik.http.routers.neko-secure.rule=Host(`web.brainiac.gg`)"
+      - "traefik.http.routers.neko-secure.entrypoints=https"
+      - "traefik.http.routers.neko-secure.tls=true"
+      - "traefik.http.routers.neko-secure.tls.certresolver=letsencrypt"
+      
+      # Service definition
+      - "traefik.http.services.neko-service.loadbalancer.server.port=8080"
+      - "traefik.http.routers.neko-http.service=neko-service"
+      - "traefik.http.routers.neko-secure.service=neko-service"
+      
+      # Headers for WebSockets and SSL/proxy
+      - "traefik.http.middlewares.neko-headers.headers.customRequestHeaders.X-Forwarded-Proto=https"
+      - "traefik.http.middlewares.neko-headers.headers.customRequestHeaders.X-Forwarded-Host=web.brainiac.gg"
+      - "traefik.http.routers.neko-secure.middlewares=neko-headers"
+
 networks:
   proxy:
     external: true

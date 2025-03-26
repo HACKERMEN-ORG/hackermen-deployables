@@ -1,27 +1,50 @@
+version: "3.8"
+
 services:
   code-server:
-    image: lscr.io/linuxserver/code-server:latest
+    image: linuxserver/code-server:latest
     container_name: code-server
+    restart: unless-stopped
     environment:
       - PUID=1000
       - PGID=1000
-      - TZ=Etc/UTC
-      - PASSWORD=password #optional
-      - HASHED_PASSWORD= #optional
-      - SUDO_PASSWORD=password #optional
-      - SUDO_PASSWORD_HASH= #optional
-      #- PROXY_DOMAIN=code-server.my.domain #optional
-      - DEFAULT_WORKSPACE=/config/workspace #optional
+      - TZ=America/New_York  # Change to your timezone
+      - PASSWORD=password123  # Change this to a secure password
+      - SUDO_PASSWORD=password123  # Change this to a secure password for sudo
+      - PROXY_DOMAIN=code.brainiac.gg  # Match your domain
+      - DEFAULT_WORKSPACE=/config/workspace  # Default workspace path
+      # Disable HTTPS redirection - critical to prevent redirect loops
+      - HSTS=false
+      - CS_DISABLE_GETTING_STARTED_OVERRIDE=true
     volumes:
-      - /path/to/appdata/config:/config
-    restart: unless-stopped
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.vscode.rule=Host(`code.system.exposed`)"
-      - "traefik.http.routers.vscode.entrypoints=https"
-      - "traefik.http.routers.vscode.tls=true"
+      - ./config:/config
+      - ./projects:/config/workspace  # Mount your projects folder
     networks:
       - proxy
+    labels:
+      - "traefik.enable=true"
+      
+      # HTTP Router
+      - "traefik.http.routers.vscode-http.rule=Host(`code.brainiac.gg`)"
+      - "traefik.http.routers.vscode-http.entrypoints=http"
+      
+      # HTTPS Router
+      - "traefik.http.routers.vscode-secure.rule=Host(`code.brainiac.gg`)"
+      - "traefik.http.routers.vscode-secure.entrypoints=https"
+      - "traefik.http.routers.vscode-secure.tls=true"
+      - "traefik.http.routers.vscode-secure.tls.certresolver=letsencrypt"
+      
+      # Service definition
+      - "traefik.http.services.vscode-service.loadbalancer.server.port=8443"
+      - "traefik.http.routers.vscode-http.service=vscode-service"
+      - "traefik.http.routers.vscode-secure.service=vscode-service"
+      
+      # Headers for SSL/proxy
+      - "traefik.http.middlewares.vscode-headers.headers.customRequestHeaders.X-Forwarded-Proto=https"
+      - "traefik.http.middlewares.vscode-headers.headers.customRequestHeaders.X-Forwarded-Host=code.brainiac.gg"
+      - "traefik.http.middlewares.vscode-headers.headers.customRequestHeaders.X-Forwarded-For=127.0.0.1"
+      - "traefik.http.routers.vscode-secure.middlewares=vscode-headers"
+
 networks:
   proxy:
     external: true

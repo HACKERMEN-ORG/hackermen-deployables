@@ -1,26 +1,55 @@
-version: "3.6"
+version: "3.8"
+
 services:
-    organizr:
-        container_name: organizr
-        hostname: organizr
-        image: organizr/organizr:latest
-        restart: unless-stopped
-        ports:
-            - 8086:80
-        labels:
-            - "traefik.enable=true"
-            - "traefik.http.routers.organizr.rule=Host(`system.exposed`)"
-            - "traefik.http.routers.organizr.entrypoints=https"
-            - "traefik.http.routers.organizr.tls=true"
-            - "traefik.http.services.organizr.loadbalancer.server.port=80"
-        volumes:
-            - .:/config
-        environment:
-            - PUID=<uid>
-            - PGID=<gid>
-            - TZ=<timezone>
-        networks:
-            - proxy
+  organizr:
+    image: organizr/organizr:latest
+    container_name: organizr
+    restart: unless-stopped
+    volumes:
+      - ./config:/config
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/New_York  # Change to your timezone
+      - fpm=false           # Disable PHP-FPM to avoid potential redirect issues
+    networks:
+      - proxy
+    labels:
+      - "traefik.enable=true"
+      
+      # HTTP Router for root domain
+      - "traefik.http.routers.organizr-root-http.rule=Host(`brainiac.gg`)"
+      - "traefik.http.routers.organizr-root-http.entrypoints=http"
+      
+      # HTTP Router for subdomain
+      - "traefik.http.routers.organizr-http.rule=Host(`org.brainiac.gg`)"
+      - "traefik.http.routers.organizr-http.entrypoints=http"
+      
+      # HTTPS Router for root domain
+      - "traefik.http.routers.organizr-root-secure.rule=Host(`brainiac.gg`)"
+      - "traefik.http.routers.organizr-root-secure.entrypoints=https"
+      - "traefik.http.routers.organizr-root-secure.tls=true"
+      - "traefik.http.routers.organizr-root-secure.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.organizr-root-secure.middlewares=organizr-headers"
+      - "traefik.http.routers.organizr-root-secure.service=organizr-service"
+      
+      # HTTPS Router for subdomain
+      - "traefik.http.routers.organizr-secure.rule=Host(`org.brainiac.gg`)"
+      - "traefik.http.routers.organizr-secure.entrypoints=https"
+      - "traefik.http.routers.organizr-secure.tls=true"
+      - "traefik.http.routers.organizr-secure.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.organizr-secure.middlewares=organizr-headers"
+      - "traefik.http.routers.organizr-secure.service=organizr-service"
+      
+      # Service definition
+      - "traefik.http.services.organizr-service.loadbalancer.server.port=80"
+      - "traefik.http.routers.organizr-root-http.service=organizr-service"
+      - "traefik.http.routers.organizr-http.service=organizr-service"
+      
+      # Headers to fix SSL/proxy issues
+      - "traefik.http.middlewares.organizr-headers.headers.customRequestHeaders.X-Forwarded-Proto=https"
+      - "traefik.http.middlewares.organizr-headers.headers.customRequestHeaders.X-Forwarded-Host=brainiac.gg"
+
 networks:
   proxy:
     external: true
