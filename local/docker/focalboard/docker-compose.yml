@@ -1,0 +1,41 @@
+version: "3.8"
+
+services:
+  focalboard:
+    image: mattermost/focalboard:latest
+    container_name: focalboard
+    restart: unless-stopped
+    volumes:
+      - ./data:/data  # Persistent data storage
+    environment:
+      # Explicitly turn off internal SSL redirects
+      - WEBSERVER_ROOT=/
+      - DISABLE_SSL_REDIRECT=true
+    networks:
+      - proxy
+    labels:
+      - "traefik.enable=true"
+      
+      # HTTP Router - explicitly handle HTTP
+      - "traefik.http.routers.focalboard-http.rule=Host(`${FOCALBOARD}.${HOSTNAME}`)"
+      - "traefik.http.routers.focalboard-http.entrypoints=http"
+      
+      # HTTPS Router - for secure connections
+      - "traefik.http.routers.focalboard-secure.rule=Host(`${FOCALBOARD}.${HOSTNAME}`)"
+      - "traefik.http.routers.focalboard-secure.entrypoints=https"
+      - "traefik.http.routers.focalboard-secure.tls=true"
+      - "traefik.http.routers.focalboard-secure.tls.certresolver=selfsigned"
+      
+      # Service definition - both routers use the same service
+      - "traefik.http.services.focalboard-service.loadbalancer.server.port=8000"
+      - "traefik.http.routers.focalboard-http.service=focalboard-service"
+      - "traefik.http.routers.focalboard-secure.service=focalboard-service"
+      
+      # Headers to fix SSL/proxy issues
+      - "traefik.http.middlewares.focalboard-headers.headers.customRequestHeaders.X-Forwarded-Proto=https"
+      - "traefik.http.middlewares.focalboard-headers.headers.customRequestHeaders.X-Forwarded-Host=${FOCALBOARD}.${HOSTNAME}"
+      - "traefik.http.routers.focalboard-secure.middlewares=focalboard-headers"
+
+networks:
+  proxy:
+    external: true

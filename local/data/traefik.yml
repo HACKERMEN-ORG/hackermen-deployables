@@ -1,0 +1,26 @@
+api:
+  dashboard: true
+  debug: true
+entryPoints:
+  http:
+    address: ":80"
+  https:
+    address: ":443"
+serversTransport:
+  insecureSkipVerify: true
+providers:
+  docker:
+    endpoint: "unix:///var/run/docker.sock"
+    exposedByDefault: false
+    watch: true
+  file:
+    filename: /config.yml
+certificatesResolvers:
+  selfsigned:
+    acme:
+      caServer: "https://acme-staging-v02.api.letsencrypt.org/directory"  # Use staging or set up local CA
+      storage: acme.json
+      httpChallenge:
+        entryPoint: http
+log:
+  level: INFO

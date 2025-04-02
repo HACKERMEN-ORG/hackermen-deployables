@@ -1,0 +1,45 @@
+---
+- name: Install and configure Traefik reverse-proxy for local network
+  hosts: localhost
+
+  tasks: 
+    - name: Install Docker and Docker Compose
+      apt:
+        name: 
+          - docker.io
+          - docker-compose
+        state: present
+
+    - name: Ensure Docker service is started
+      service:
+        name: docker
+        state: started
+        enabled: yes
+        
+    - name: Create Docker network
+      community.docker.docker_network:
+        name: proxy
+        state: present
+
+    - name: Ensure self-signed cert directory exists
+      file:
+        path: ./data/certs
+        state: directory
+        mode: '0755'
+
+    - name: Ensure acme.json exists with correct permissions
+      file:
+        path: ./data/acme.json
+        state: touch
+        mode: '0600'
+
+    - name: Deploy traefik
+      docker_compose:
+        project_src: .
+        state: present
+
+    # Deploy minimal core services
+    - name: Deploy Focalboard
+      docker_compose:
+        project_src: ./docker/focalboard/
+        state: present

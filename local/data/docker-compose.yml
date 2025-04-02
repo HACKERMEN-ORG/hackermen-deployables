@@ -1,0 +1,48 @@
+version: "3.8"
+
+services:
+  traefik:
+    image: traefik:v2.10
+    container_name: traefik
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - proxy
+    ports:
+      - 80:80
+      - 443:443
+    environment:
+      TRAEFIK_DASHBOARD_CREDENTIALS: ${TRAEFIK_USER}:${TRAEFIK_PASSWORD_HASH}
+    env_file: .env
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./data/traefik.yml:/traefik.yml:ro
+      - ./data/acme.json:/acme.json
+      - ./data/config.yml:/config.yml:ro
+    command:
+      - --entrypoints.http.address=:80
+      - --entrypoints.https.address=:443
+      - --providers.docker=true
+      - --api=true
+      # Self-signed certificate configuration
+      - --certificatesresolvers.selfsigned.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory
+      - --certificatesresolvers.selfsigned.acme.httpchallenge=true
+      - --certificatesresolvers.selfsigned.acme.httpchallenge.entrypoint=http
+      - --certificatesresolvers.selfsigned.acme.email=${EMAIL}
+      - --certificatesresolvers.selfsigned.acme.storage=/acme.json
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.traefik-http.rule=Host(`${TRAEFIK}.${HOSTNAME}`)"
+      - "traefik.http.routers.traefik-http.entrypoints=http"
+      - "traefik.http.middlewares.traefik-auth.basicauth.users=${TRAEFIK_USER}:${TRAEFIK_PASSWORD_HASH}"
+      - "traefik.http.routers.traefik-secure.entrypoints=https"
+      - "traefik.http.routers.traefik-secure.rule=Host(`${TRAEFIK}.${HOSTNAME}`)"
+      - "traefik.http.routers.traefik-secure.middlewares=traefik-auth"
+      - "traefik.http.routers.traefik-secure.tls=true"
+      - "traefik.http.routers.traefik-secure.service=api@internal"
+
+networks:
+  proxy:
+    external: true
