@@ -1,0 +1,35 @@
+version: "3.8"
+
+services:
+  timetagger:
+    image: ghcr.io/almarklein/timetagger:v23.9.2-nonroot
+    container_name: timetagger
+    restart: unless-stopped
+    volumes:
+      - ./data:/data
+    environment:
+      - TIMETAGGER_BIND=0.0.0.0:80
+      - TIMETAGGER_DATADIR=/data
+      - TIMETAGGER_LOG_LEVEL=info
+      # Default credentials: test:test
+      - TIMETAGGER_CREDENTIALS=test:$$2a$$08$$0CD1NFiIbancwWsu3se1v.RNR/b7YeZd71yg3cZ/3whGlyU6Iny5i
+    networks:
+      - proxy
+    labels:
+      - "traefik.enable=true"
+      # HTTP Router - using hardcoded values
+      - "traefik.http.routers.timetagger-http.rule=Host(`time.localhost`)"
+      - "traefik.http.routers.timetagger-http.entrypoints=http"
+      # HTTPS Router - using hardcoded values
+      - "traefik.http.routers.timetagger-secure.rule=Host(`time.localhost`)"
+      - "traefik.http.routers.timetagger-secure.entrypoints=https"
+      - "traefik.http.routers.timetagger-secure.tls=true"
+      - "traefik.http.routers.timetagger-secure.tls.certresolver=selfsigned"
+      # Service definition
+      - "traefik.http.services.timetagger-service.loadbalancer.server.port=80"
+      - "traefik.http.routers.timetagger-http.service=timetagger-service"
+      - "traefik.http.routers.timetagger-secure.service=timetagger-service"
+
+networks:
+  proxy:
+    external: true

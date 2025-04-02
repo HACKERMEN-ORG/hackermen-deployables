@@ -1,0 +1,44 @@
+version: "3.8"
+
+services:
+  organizr:
+    image: organizr/organizr:latest
+    container_name: organizr
+    restart: unless-stopped
+    volumes:
+      - ./config:/config
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/New_York  # Change to your timezone if necessary
+      - fpm=false            # Disable PHP-FPM to avoid potential redirect issues
+    env_file:
+      - ../../.env           # Path to root .env file   IF YOU HAVE ISSUES CONFIRM ENV VARIABLES OR SET MANUALLY
+    networks:
+      - proxy
+    labels:
+      - "traefik.enable=true"
+      
+      # HTTP Router
+      - "traefik.http.routers.organizr-http.rule=Host(`${ORGANIZR}.${HOSTNAME}`)"
+      - "traefik.http.routers.organizr-http.entrypoints=http"
+      
+      # HTTPS Router
+      - "traefik.http.routers.organizr-secure.rule=Host(`${ORGANIZR}.${HOSTNAME}`)"
+      - "traefik.http.routers.organizr-secure.entrypoints=https"
+      - "traefik.http.routers.organizr-secure.tls=true"
+      - "traefik.http.routers.organizr-secure.tls.certresolver=selfsigned"
+      - "traefik.http.routers.organizr-secure.middlewares=organizr-headers"
+      
+      # Service definition
+      - "traefik.http.services.organizr-service.loadbalancer.server.port=80"
+      - "traefik.http.routers.organizr-http.service=organizr-service"
+      - "traefik.http.routers.organizr-secure.service=organizr-service"
+      
+      # Headers to fix SSL/proxy issues
+      - "traefik.http.middlewares.organizr-headers.headers.customRequestHeaders.X-Forwarded-Proto=https"
+      - "traefik.http.middlewares.organizr-headers.headers.customRequestHeaders.X-Forwarded-Host=${ORGANIZR}.${HOSTNAME}"
+
+networks:
+  proxy:
+    external: true
