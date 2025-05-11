@@ -1,0 +1,33 @@
+version: "3.8"
+
+services:
+  react-frontend:
+    image: nginx:alpine
+    container_name: react-frontend
+    restart: unless-stopped
+    volumes:
+      - ./build:/usr/share/nginx/html
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - proxy
+    labels:
+      - "traefik.enable=true"
+      
+      # HTTP Router (for redirect to HTTPS)
+      - "traefik.http.routers.react-frontend-http.rule=Host(`app.brainiac.gg`)"
+      - "traefik.http.routers.react-frontend-http.entrypoints=http"
+      
+      # HTTPS Router
+      - "traefik.http.routers.react-frontend-secure.rule=Host(`app.brainiac.gg`)"
+      - "traefik.http.routers.react-frontend-secure.entrypoints=https"
+      - "traefik.http.routers.react-frontend-secure.tls=true"
+      - "traefik.http.routers.react-frontend-secure.tls.certresolver=letsencrypt"
+      
+      # Service definition
+      - "traefik.http.services.react-frontend-service.loadbalancer.server.port=80"
+      - "traefik.http.routers.react-frontend-http.service=react-frontend-service"
+      - "traefik.http.routers.react-frontend-secure.service=react-frontend-service"
+
+networks:
+  proxy:
+    external: true
