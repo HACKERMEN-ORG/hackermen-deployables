@@ -1,0 +1,22 @@
+version: "3.8"
+
+services:
+  discord-dashboard-frontend:
+    volumes:
+      # For development, mount the src directory instead of using the build
+      - ../../../dashboard/client/build:/usr/share/nginx/html
+    
+  discord-dashboard-backend:
+    build:
+      # Use the development Dockerfile for hot reloading
+      dockerfile: Dockerfile.dev
+    volumes:
+      # For development, mount the src directory instead of using the build
+      - ../../../dashboard/server:/app
+    environment:
+      - NODE_ENV=development
+      
+  discord-dashboard-mongodb:
+    ports:
+      # Expose MongoDB port for local development
+      - "27017:27017"

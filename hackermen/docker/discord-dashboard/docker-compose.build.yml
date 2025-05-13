@@ -1,0 +1,10 @@
+version: "3.8"
+
+services:
+  react-builder:
+    image: node:20-alpine
+    volumes:
+      - /home/user/Documents/DiscordBot/dashboard/client:/app
+      - ./frontend/build:/output
+    working_dir: /app
+    command: sh -c "npm install && npm run build && mkdir -p /output && cp -r build/* /output/"

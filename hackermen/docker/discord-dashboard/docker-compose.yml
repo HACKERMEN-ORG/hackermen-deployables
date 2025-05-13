@@ -1,0 +1,103 @@
+version: "3.8"
+
+services:
+  discord-dashboard-frontend:
+    # Option 1: Use pre-built React app (default)
+    image: nginx:alpine
+    container_name: discord-dashboard-frontend
+    restart: unless-stopped
+    volumes:
+      - ./frontend/build:/usr/share/nginx/html
+      - ./frontend/nginx.conf:/etc/nginx/conf.d/default.conf
+    
+    # Option 2: Uncomment to build the React app using Docker instead
+    # build:
+    #   context: .
+    #   dockerfile: ./frontend/Dockerfile
+    networks:
+      - proxy
+    labels:
+      - "traefik.enable=true"
+      
+      # HTTP Router (for redirect to HTTPS)
+      - "traefik.http.routers.discord-dashboard-http.rule=Host(`dashboard.${DOMAIN}`)"
+      - "traefik.http.routers.discord-dashboard-http.entrypoints=http"
+      - "traefik.http.middlewares.discord-dashboard-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.discord-dashboard-http.middlewares=discord-dashboard-https-redirect"
+      
+      # HTTPS Router
+      - "traefik.http.routers.discord-dashboard-secure.rule=Host(`dashboard.${DOMAIN}`)"
+      - "traefik.http.routers.discord-dashboard-secure.entrypoints=https"
+      - "traefik.http.routers.discord-dashboard-secure.tls=true"
+      - "traefik.http.routers.discord-dashboard-secure.tls.certresolver=letsencrypt"
+      
+      # Service definition
+      - "traefik.http.services.discord-dashboard-service.loadbalancer.server.port=80"
+      - "traefik.http.routers.discord-dashboard-http.service=discord-dashboard-service"
+      - "traefik.http.routers.discord-dashboard-secure.service=discord-dashboard-service"
+
+  discord-dashboard-backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: discord-dashboard-backend
+    restart: unless-stopped
+    env_file:
+      - ./backend/.env
+    volumes:
+      - ./backend/logs:/app/logs
+    depends_on:
+      - discord-dashboard-mongodb
+    networks:
+      - proxy
+      - internal
+    labels:
+      - "traefik.enable=true"
+      
+      # HTTP Router (for redirect to HTTPS)
+      - "traefik.http.routers.discord-api-http.rule=Host(`api.dashboard.${DOMAIN}`)"
+      - "traefik.http.routers.discord-api-http.entrypoints=http"
+      - "traefik.http.middlewares.discord-api-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.discord-api-http.middlewares=discord-api-https-redirect"
+      
+      # HTTPS Router
+      - "traefik.http.routers.discord-api-secure.rule=Host(`api.dashboard.${DOMAIN}`)"
+      - "traefik.http.routers.discord-api-secure.entrypoints=https"
+      - "traefik.http.routers.discord-api-secure.tls=true"
+      - "traefik.http.routers.discord-api-secure.tls.certresolver=letsencrypt"
+      
+      # Service definition
+      - "traefik.http.services.discord-api-service.loadbalancer.server.port=5000"
+      - "traefik.http.routers.discord-api-http.service=discord-api-service"
+      - "traefik.http.routers.discord-api-secure.service=discord-api-service"
+      
+      # Headers and middleware
+      - "traefik.http.middlewares.discord-api-headers.headers.accesscontrolallowmethods=GET,POST,PUT,DELETE,OPTIONS"
+      - "traefik.http.middlewares.discord-api-headers.headers.accesscontrolallowheaders=Content-Type,Authorization,X-CSRF-Token"
+      - "traefik.http.middlewares.discord-api-headers.headers.accesscontrolalloworiginlist=https://dashboard.${DOMAIN}"
+      - "traefik.http.middlewares.discord-api-headers.headers.accesscontrolmaxage=86400"
+      - "traefik.http.middlewares.discord-api-headers.headers.addvaryheader=true"
+      - "traefik.http.routers.discord-api-secure.middlewares=discord-api-headers"
+
+  discord-dashboard-mongodb:
+    image: mongo:6
+    container_name: discord-dashboard-mongodb
+    restart: unless-stopped
+    command: ["--auth"]
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD}
+      MONGO_INITDB_DATABASE: discord_bot
+    volumes:
+      - ./mongodb/data:/data/db
+      - ./mongodb/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+    networks:
+      - internal
+    labels:
+      - "traefik.enable=false"  # Not exposed to the internet
+
+networks:
+  proxy:
+    external: true
+  internal:
+    external: false

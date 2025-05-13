@@ -1,0 +1,9 @@
+FROM node:18-alpine
+
+WORKDIR /app
+
+# Install nodemon for development hot-reloading
+RUN npm install -g nodemon
+
+# Run npm install whenever this container starts
+CMD npm install && nodemon server.js
