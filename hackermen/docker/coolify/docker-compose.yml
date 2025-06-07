@@ -66,7 +66,7 @@ services:
       - "traefik.http.routers.coolify-secure.tls.certresolver=letsencrypt"
       
       # Service definition
-      - "traefik.http.services.coolify-service.loadbalancer.server.port=80"
+      - "traefik.http.services.coolify-service.loadbalancer.server.port=8000"
       - "traefik.http.routers.coolify-http.service=coolify-service"
       - "traefik.http.routers.coolify-secure.service=coolify-service"
 
