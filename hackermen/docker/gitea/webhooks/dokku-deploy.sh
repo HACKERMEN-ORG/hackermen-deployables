@@ -7,6 +7,7 @@ set -e
 
 # Configuration
 DOKKU_HOST="dokku.brainiac.gg"
+DOKKU_PORT="2222"
 DOKKU_USER="dokku"
 TEMP_DIR="/tmp/dokku-deploy"
 
@@ -29,8 +30,17 @@ deploy_to_dokku() {
     git clone "$repo_url" "$app_name"
     cd "$app_name"
     
+    # Configure SSH for custom port
+    mkdir -p ~/.ssh
+    cat > ~/.ssh/config <<EOF
+Host dokku.brainiac.gg
+    Port $DOKKU_PORT
+    StrictHostKeyChecking no
+    UserKnownHostsFile /dev/null
+EOF
+    
     # Add Dokku remote and push
-    git remote add dokku "dokku@$DOKKU_HOST:$app_name"
+    git remote add dokku "ssh://$DOKKU_USER@$DOKKU_HOST:$DOKKU_PORT/$app_name"
     git push dokku "$branch:main" --force
     
     # Cleanup

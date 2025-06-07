@@ -1,6 +1,50 @@
 version: "3.8"
 
 services:
+  # Dokku PaaS container
+  dokku:
+    build: .
+    container_name: dokku
+    restart: unless-stopped
+    privileged: true
+    environment:
+      - DOKKU_DOMAIN=brainiac.gg
+      - DOCKER_HOST=unix:///var/run/docker.sock
+    volumes:
+      # Docker socket for container management
+      - /var/run/docker.sock:/var/run/docker.sock
+      # Persistent Dokku data
+      - dokku_home:/home/dokku
+      - dokku_config:/var/lib/dokku
+      - dokku_apps:/var/lib/dokku/data
+      # SSH keys for authentication
+      - ./ssh-keys:/ssh-keys:ro
+      # Nginx configuration
+      - dokku_nginx:/etc/nginx/sites-enabled
+    ports:
+      - "2222:22"  # SSH access for git push
+    networks:
+      - proxy
+    labels:
+      - "traefik.enable=true"
+      
+      # HTTP Router for Dokku apps (wildcard)
+      - "traefik.http.routers.dokku-apps-http.rule=HostRegexp(`{subdomain:[a-z0-9-]+}.dokku.brainiac.gg`)"
+      - "traefik.http.routers.dokku-apps-http.entrypoints=http"
+      - "traefik.http.routers.dokku-apps-http.priority=1"
+      
+      # HTTPS Router for Dokku apps (wildcard)
+      - "traefik.http.routers.dokku-apps-secure.rule=HostRegexp(`{subdomain:[a-z0-9-]+}.dokku.brainiac.gg`)"
+      - "traefik.http.routers.dokku-apps-secure.entrypoints=https"
+      - "traefik.http.routers.dokku-apps-secure.tls=true"
+      - "traefik.http.routers.dokku-apps-secure.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.dokku-apps-secure.priority=1"
+      
+      # Service definition
+      - "traefik.http.services.dokku-apps-service.loadbalancer.server.port=80"
+      - "traefik.http.routers.dokku-apps-http.service=dokku-apps-service"
+      - "traefik.http.routers.dokku-apps-secure.service=dokku-apps-service"
+
   # Simple Dokku dashboard
   dokku-dashboard:
     image: nginx:alpine
@@ -16,17 +60,25 @@ services:
       # HTTP Router
       - "traefik.http.routers.dokku-http.rule=Host(`dokku.brainiac.gg`)"
       - "traefik.http.routers.dokku-http.entrypoints=http"
+      - "traefik.http.routers.dokku-http.priority=10"
       
       # HTTPS Router
       - "traefik.http.routers.dokku-secure.rule=Host(`dokku.brainiac.gg`)"
       - "traefik.http.routers.dokku-secure.entrypoints=https"
       - "traefik.http.routers.dokku-secure.tls=true"
       - "traefik.http.routers.dokku-secure.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.dokku-secure.priority=10"
       
       # Service definition
       - "traefik.http.services.dokku-service.loadbalancer.server.port=80"
       - "traefik.http.routers.dokku-http.service=dokku-service"
       - "traefik.http.routers.dokku-secure.service=dokku-service"
+
+volumes:
+  dokku_home:
+  dokku_config:
+  dokku_apps:
+  dokku_nginx:
 
 networks:
   proxy:
