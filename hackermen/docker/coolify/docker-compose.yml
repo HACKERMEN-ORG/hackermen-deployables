@@ -49,6 +49,8 @@ services:
     volumes:
       # Docker socket for container management
       - /var/run/docker.sock:/var/run/docker.sock
+      # SSH keys for localhost access
+      - /root/.ssh:/var/www/html/.ssh:ro
       # Coolify data and configuration
       - coolify_data:/data
       - coolify_ssh:/var/www/html/storage/app/ssh
@@ -77,7 +79,7 @@ services:
       - "traefik.http.routers.coolify-secure.tls.certresolver=letsencrypt"
       
       # Service definition
-      - "traefik.http.services.coolify-service.loadbalancer.server.port=8000"
+      - "traefik.http.services.coolify-service.loadbalancer.server.port=80"
       - "traefik.http.routers.coolify-http.service=coolify-service"
       - "traefik.http.routers.coolify-secure.service=coolify-service"
 
