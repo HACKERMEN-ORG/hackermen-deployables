@@ -35,7 +35,13 @@ services:
         mkdir -p /var/www/html/storage/framework/views
         chown -R www-data:www-data /var/www/html/storage
         chmod -R 755 /var/www/html/storage
-        exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
+        if [ -f /usr/bin/supervisord ]; then
+          exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
+        elif [ -f /usr/local/bin/supervisord ]; then
+          exec /usr/local/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
+        else
+          exec /docker-entrypoint.sh
+        fi
     volumes:
       # Docker socket for container management
       - /var/run/docker.sock:/var/run/docker.sock
