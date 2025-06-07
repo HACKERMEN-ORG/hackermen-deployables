@@ -7,17 +7,6 @@ services:
     environment:
       - USER_UID=1000
       - USER_GID=1000
-      - GITEA__database__DB_TYPE=sqlite3
-      - GITEA__database__PATH=/data/gitea/gitea.db
-      - GITEA__server__DOMAIN=git.brainiac.gg
-      - GITEA__server__SSH_DOMAIN=git.brainiac.gg
-      - GITEA__server__ROOT_URL=https://git.brainiac.gg/
-      - GITEA__server__SSH_PORT=222
-      - GITEA__server__SSH_LISTEN_PORT=22
-      - GITEA__server__DISABLE_SSH=false
-      - GITEA__security__INSTALL_LOCK=false
-      - GITEA__webhook__ALLOWED_HOST_LIST=dokku.brainiac.gg,private,*.local
-      - GITEA__actions__ENABLED=true
     restart: unless-stopped
     networks:
       - proxy
