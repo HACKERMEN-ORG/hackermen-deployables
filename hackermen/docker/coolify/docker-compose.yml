@@ -1,12 +1,38 @@
 version: "3.8"
 
 services:
+  # Init container to fix permissions
+  coolify-init:
+    image: ghcr.io/coollabsio/coolify:latest
+    container_name: coolify-init
+    user: "0:0"
+    command: |
+      sh -c "
+        mkdir -p /var/www/html/storage/app/ssh/keys
+        mkdir -p /var/www/html/storage/app/applications
+        mkdir -p /var/www/html/storage/app/backups
+        mkdir -p /var/www/html/storage/app/services
+        mkdir -p /var/www/html/storage/app/webhooks
+        mkdir -p /var/www/html/storage/logs
+        mkdir -p /var/www/html/storage/framework/cache
+        mkdir -p /var/www/html/storage/framework/sessions
+        mkdir -p /var/www/html/storage/framework/views
+        chown -R www-data:www-data /var/www/html/storage
+        chmod -R 755 /var/www/html/storage
+      "
+    volumes:
+      - coolify_data:/data
+      - coolify_ssh:/var/www/html/storage/app/ssh
+      - coolify_applications:/var/www/html/storage/app/applications
+      - coolify_backups:/var/www/html/storage/app/backups
+      - coolify_services:/var/www/html/storage/app/services
+      - coolify_webhooks:/var/www/html/storage/app/webhooks
+
   coolify:
     image: ghcr.io/coollabsio/coolify:latest
     container_name: coolify
     restart: unless-stopped
     privileged: true
-    user: "0:0"
     environment:
       - AUTORUN=false
       - APP_ENV=production
@@ -20,28 +46,6 @@ services:
       - PUSHER_APP_KEY=${PUSHER_APP_KEY}
       - PUSHER_APP_SECRET=${PUSHER_APP_SECRET}
       - PUSHER_APP_CLUSTER=mt1
-    entrypoint: 
-      - /bin/sh
-      - -c
-      - |
-        mkdir -p /var/www/html/storage/app/ssh/keys
-        mkdir -p /var/www/html/storage/app/applications
-        mkdir -p /var/www/html/storage/app/backups
-        mkdir -p /var/www/html/storage/app/services
-        mkdir -p /var/www/html/storage/app/webhooks
-        mkdir -p /var/www/html/storage/logs
-        mkdir -p /var/www/html/storage/framework/cache
-        mkdir -p /var/www/html/storage/framework/sessions
-        mkdir -p /var/www/html/storage/framework/views
-        chown -R www-data:www-data /var/www/html/storage
-        chmod -R 755 /var/www/html/storage
-        if [ -f /usr/bin/supervisord ]; then
-          exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
-        elif [ -f /usr/local/bin/supervisord ]; then
-          exec /usr/local/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
-        else
-          exec /docker-entrypoint.sh
-        fi
     volumes:
       # Docker socket for container management
       - /var/run/docker.sock:/var/run/docker.sock
@@ -56,6 +60,7 @@ services:
       - proxy
       - coolify
     depends_on:
+      - coolify-init
       - coolify-db
       - redis
     labels:
