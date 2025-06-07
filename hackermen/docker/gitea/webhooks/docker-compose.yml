@@ -1,0 +1,36 @@
+version: "3.8"
+
+services:
+  webhook-server:
+    build: .
+    container_name: gitea-webhook-server
+    restart: unless-stopped
+    environment:
+      - WEBHOOK_SECRET=${WEBHOOK_SECRET:-changeme}
+      - DOKKU_HOST=dokku.brainiac.gg
+    volumes:
+      - ./dokku-deploy.sh:/webhooks/dokku-deploy.sh:ro
+      - ~/.ssh:/root/.ssh:ro  # Mount SSH keys for Dokku access
+    networks:
+      - proxy
+    labels:
+      - "traefik.enable=true"
+      
+      # HTTP Router
+      - "traefik.http.routers.webhook-http.rule=Host(`webhook.brainiac.gg`)"
+      - "traefik.http.routers.webhook-http.entrypoints=http"
+      
+      # HTTPS Router
+      - "traefik.http.routers.webhook-secure.rule=Host(`webhook.brainiac.gg`)"
+      - "traefik.http.routers.webhook-secure.entrypoints=https"
+      - "traefik.http.routers.webhook-secure.tls=true"
+      - "traefik.http.routers.webhook-secure.tls.certresolver=letsencrypt"
+      
+      # Service definition
+      - "traefik.http.services.webhook-service.loadbalancer.server.port=9000"
+      - "traefik.http.routers.webhook-http.service=webhook-service"
+      - "traefik.http.routers.webhook-secure.service=webhook-service"
+
+networks:
+  proxy:
+    external: true

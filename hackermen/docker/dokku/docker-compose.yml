@@ -1,0 +1,68 @@
+version: "3.8"
+
+services:
+  # Dokku Web UI using Dokku Pro
+  dokku-pro:
+    image: dokku/pro:latest
+    container_name: dokku-pro
+    restart: unless-stopped
+    environment:
+      - DOKKU_HOSTNAME=dokku.brainiac.gg
+      - DOKKU_HOST_ROOT=/var/lib/dokku
+      - RAILS_ENV=production
+      - DATABASE_URL=sqlite3:///var/lib/dokku-pro/db/production.sqlite3
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /var/lib/dokku:/var/lib/dokku
+      - ./data:/var/lib/dokku-pro
+      - /home/dokku:/home/dokku
+    networks:
+      - proxy
+    labels:
+      - "traefik.enable=true"
+      
+      # HTTP Router
+      - "traefik.http.routers.dokku-http.rule=Host(`dokku.brainiac.gg`)"
+      - "traefik.http.routers.dokku-http.entrypoints=http"
+      
+      # HTTPS Router
+      - "traefik.http.routers.dokku-secure.rule=Host(`dokku.brainiac.gg`)"
+      - "traefik.http.routers.dokku-secure.entrypoints=https"
+      - "traefik.http.routers.dokku-secure.tls=true"
+      - "traefik.http.routers.dokku-secure.tls.certresolver=letsencrypt"
+      
+      # Service definition
+      - "traefik.http.services.dokku-service.loadbalancer.server.port=3000"
+      - "traefik.http.routers.dokku-http.service=dokku-service"
+      - "traefik.http.routers.dokku-secure.service=dokku-service"
+      
+      # Headers for SSL/proxy
+      - "traefik.http.middlewares.dokku-headers.headers.customRequestHeaders.X-Forwarded-Proto=https"
+      - "traefik.http.middlewares.dokku-headers.headers.customRequestHeaders.X-Forwarded-Host=dokku.brainiac.gg"
+      - "traefik.http.routers.dokku-secure.middlewares=dokku-headers"
+
+  # Alternative: Wharf - A web UI for Dokku
+  # Uncomment if you prefer Wharf over Dokku Pro
+  # wharf:
+  #   image: kyzima-spb/wharf:latest
+  #   container_name: wharf
+  #   restart: unless-stopped
+  #   environment:
+  #     - WHARF_HOST=dokku.brainiac.gg
+  #     - SECRET_KEY=your-secret-key-here  # Change this!
+  #   volumes:
+  #     - /home/dokku:/home/dokku:ro
+  #     - /var/lib/dokku:/var/lib/dokku:ro
+  #   networks:
+  #     - proxy
+  #   labels:
+  #     - "traefik.enable=true"
+  #     - "traefik.http.routers.wharf.rule=Host(`dokku.brainiac.gg`)"
+  #     - "traefik.http.routers.wharf.entrypoints=https"
+  #     - "traefik.http.routers.wharf.tls=true"
+  #     - "traefik.http.routers.wharf.tls.certresolver=letsencrypt"
+  #     - "traefik.http.services.wharf.loadbalancer.server.port=5000"
+
+networks:
+  proxy:
+    external: true

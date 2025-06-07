@@ -1,0 +1,56 @@
+version: "3.8"
+
+services:
+  gitea:
+    image: gitea/gitea:latest
+    container_name: gitea
+    environment:
+      - USER_UID=1000
+      - USER_GID=1000
+      - GITEA__database__DB_TYPE=sqlite3
+      - GITEA__database__PATH=/data/gitea/gitea.db
+      - GITEA__server__DOMAIN=git.brainiac.gg
+      - GITEA__server__SSH_DOMAIN=git.brainiac.gg
+      - GITEA__server__ROOT_URL=https://git.brainiac.gg/
+      - GITEA__server__SSH_PORT=222
+      - GITEA__server__SSH_LISTEN_PORT=22
+      - GITEA__server__DISABLE_SSH=false
+      - GITEA__security__INSTALL_LOCK=false
+      - GITEA__webhook__ALLOWED_HOST_LIST=dokku.brainiac.gg,private,*.local
+      - GITEA__actions__ENABLED=true
+    restart: unless-stopped
+    networks:
+      - proxy
+    volumes:
+      - ./data:/data
+      - ./config:/etc/gitea
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - "222:22"  # SSH access on host port 222
+    labels:
+      - "traefik.enable=true"
+      
+      # HTTP Router
+      - "traefik.http.routers.gitea-http.rule=Host(`git.brainiac.gg`)"
+      - "traefik.http.routers.gitea-http.entrypoints=http"
+      
+      # HTTPS Router
+      - "traefik.http.routers.gitea-secure.rule=Host(`git.brainiac.gg`)"
+      - "traefik.http.routers.gitea-secure.entrypoints=https"
+      - "traefik.http.routers.gitea-secure.tls=true"
+      - "traefik.http.routers.gitea-secure.tls.certresolver=letsencrypt"
+      
+      # Service definition
+      - "traefik.http.services.gitea-service.loadbalancer.server.port=3000"
+      - "traefik.http.routers.gitea-http.service=gitea-service"
+      - "traefik.http.routers.gitea-secure.service=gitea-service"
+      
+      # Headers for SSL/proxy
+      - "traefik.http.middlewares.gitea-headers.headers.customRequestHeaders.X-Forwarded-Proto=https"
+      - "traefik.http.middlewares.gitea-headers.headers.customRequestHeaders.X-Forwarded-Host=git.brainiac.gg"
+      - "traefik.http.routers.gitea-secure.middlewares=gitea-headers"
+
+networks:
+  proxy:
+    external: true
