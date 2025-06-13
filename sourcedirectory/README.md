@@ -6,7 +6,8 @@ This directory contains all the service configurations and deployment scripts fo
 
 - Docker and Docker Compose installed
 - Ansible installed (for automated deployment)
-- A domain name with Cloudflare DNS management
+- A domain name with DNS access (Cloudflare recommended for advanced features)
+- Port 80 and 443 available for Let's Encrypt SSL certificate validation
 - Basic knowledge of Docker and reverse proxy concepts
 
 ## Initial Setup
@@ -24,13 +25,36 @@ TRAEFIK_DASHBOARD_CREDENTIALS=admin:$apr1$3fqolv60$K8PEqP851OAEcBuRNYaxU1
 CF_DNS_API_TOKEN=your-cloudflare-api-token
 ```
 
-### 2. Cloudflare API Token
+### 2. SSL Certificate Configuration
 
-To create your Cloudflare API token:
+**Let's Encrypt with HTTP Challenge (Default)**
+
+The default configuration uses Let's Encrypt HTTP challenge, which works out-of-the-box with any domain provider:
+
+- Certificates are automatically obtained when services start
+- Automatic renewal every 90 days
+- Requires ports 80 and 443 to be accessible from the internet
+- Each subdomain gets its own certificate
+
+**Let's Encrypt with Cloudflare DNS Challenge (Advanced)**
+
+For wildcard certificates or when HTTP challenge isn't feasible:
+
 1. Log into your Cloudflare account
 2. Go to Profile → API Tokens
 3. Create a token with permissions: `Zone.Zone, Zone.DNS`
-4. Save the token in your `.env` file
+4. Update your `.env` file with the token
+5. Uncomment the Cloudflare configuration in `docker-compose.yml`
+
+```bash
+# In your .env file
+CF_DNS_API_TOKEN=your-cloudflare-api-token
+```
+
+**Benefits of DNS Challenge:**
+- Works behind firewalls/NAT
+- Supports wildcard certificates (*.example.com)
+- No need for public HTTP access during certificate generation
 
 ### 3. Docker Network
 
@@ -39,6 +63,18 @@ Create the proxy network that all services will use:
 ```bash
 docker network create proxy
 ```
+
+### 4. SSL Certificate Storage
+
+Ensure the ACME certificate storage file exists and has proper permissions:
+
+```bash
+# Create the certificate storage file
+touch ./data/acme.json
+chmod 600 ./data/acme.json
+```
+
+**Important**: The `acme.json` file stores your Let's Encrypt certificates. Back this file up regularly and ensure it's not publicly accessible.
 
 ## Service Configuration
 
@@ -112,9 +148,24 @@ See the `docker/` directory for all available service configurations.
 
 ## Maintenance
 
-### SSL Certificate Renewal
+### SSL Certificate Management
 
-Certificates are automatically renewed via Traefik's ACME integration. No manual intervention required.
+**Automatic Renewal**
+- Let's Encrypt certificates are automatically renewed by Traefik
+- Renewal occurs when certificates are within 30 days of expiration
+- Zero-downtime renewal process
+- No manual intervention required
+
+**Certificate Monitoring**
+- Check certificate status in Traefik dashboard: `https://traefik.yourdomain.com`
+- Verify certificate expiration: `openssl s_client -connect yourdomain.com:443 | openssl x509 -noout -dates`
+- Monitor Traefik logs: `docker logs traefik`
+
+**Troubleshooting SSL Issues**
+- Ensure ports 80/443 are accessible for HTTP challenge
+- Verify DNS records point to your server
+- Check Traefik configuration in `data/traefik.yml`
+- Review Let's Encrypt rate limits if requests fail
 
 ### Backup Strategy
 
@@ -141,7 +192,11 @@ docker-compose up -d
 ### Common Issues
 
 1. **Port Conflicts**: Ensure no other services are using ports 80/443
-2. **SSL Issues**: Verify Cloudflare API token permissions
+2. **SSL Certificate Issues**: 
+   - Verify domain DNS points to your server
+   - Check Let's Encrypt rate limits (50 certificates per week per domain)
+   - Ensure `acme.json` has correct permissions (600)
+   - For Cloudflare DNS challenge: verify API token permissions
 3. **Network Issues**: Confirm the proxy network exists
 4. **Service Discovery**: Check Traefik labels in docker-compose files
 

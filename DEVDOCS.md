@@ -87,16 +87,32 @@ Add and remove stuff from the playbook as needed to get ansible-playbook to work
 
 DEPLOY!!!
 
-TODO:
+## SSL/TLS Management
 
-Certbot (this needs to be added to ansible playbooks)
-make a service with cerbot
-first, kill docker
-certbot certonly
-re-up docker
+### Modern Approach: Traefik + Let's Encrypt ACME
 
-daily renewing cronjob
-```
+The project now uses Traefik's built-in ACME client for automatic SSL certificate management, eliminating the need for manual Certbot integration.
+
+**Benefits:**
+- Zero-downtime certificate renewal
+- Automatic certificate provisioning for new services
+- No need to stop/restart Docker containers
+- Built-in support for multiple challenge types
+
+**Configuration:**
+- HTTP Challenge: Default, works with any DNS provider
+- DNS Challenge: Cloudflare integration for wildcard certificates
+
+**Key Files:**
+- `data/traefik.yml`: ACME configuration
+- `data/acme.json`: Certificate storage (must be chmod 600)
+
+### Legacy Certbot Approach (Deprecated)
+
+The old manual Certbot approach is no longer recommended:
+
+```bash
+# OLD METHOD - DO NOT USE
 #!/bin/sh
 docker kill $(docker ps)
 systemctl stop docker
@@ -104,5 +120,24 @@ certbot renew
 systemctl restart docker
 ```
 
-### SSL from inside docker (no cloudflare) solution
-https://doc.traefik.io/traefik/user-guides/docker-compose/acme-tls/
+**Why this is problematic:**
+- Causes service downtime during renewal
+- Requires manual intervention
+- Prone to automation failures
+- Complex coordination with Docker
+
+### Migration from Certbot
+
+If migrating from a Certbot setup:
+1. Stop any existing Certbot renewal cron jobs
+2. Remove manual certificate mounts from docker-compose files
+3. Configure Traefik ACME as documented in the deployment guide
+4. Let Traefik handle all certificate operations
+
+### SSL Best Practices
+
+- Use strong TLS configurations (TLS 1.2+ only)
+- Enable HSTS headers where appropriate
+- Regular certificate monitoring and alerting
+- Backup `acme.json` as part of disaster recovery
+- Monitor Let's Encrypt rate limits for production environments

@@ -9,7 +9,8 @@ This project provides automated deployment and maintenance of essential services
 ## Features
 
 - **Automated Deployment**: Deploy entire infrastructure stacks with a single command
-- **SSL/TLS Management**: Automatic SSL certificates via Cloudflare DNS challenge
+- **Let's Encrypt SSL Automation**: Automatic SSL/TLS certificates with zero-downtime renewal via Traefik ACME integration
+- **Multiple SSL Challenge Methods**: HTTP challenge (default) and Cloudflare DNS challenge support
 - **Service Discovery**: Dynamic routing with Traefik reverse proxy
 - **Modular Architecture**: Easy to add or remove services
 - **Production-Ready**: Includes monitoring, backups, and security best practices
@@ -26,8 +27,12 @@ cd sourcedirectory-deployables
 ```bash
 # Create .env file with required variables
 echo "TRAEFIK_DASHBOARD_CREDENTIALS=admin:$(htpasswd -nb admin your-password | sed -e s/\\$/\\$\\$/g)" >> .env
+
+# Optional: For Cloudflare DNS challenge (recommended for wildcard certificates)
 echo "CF_DNS_API_TOKEN=your-cloudflare-api-token" >> .env
 ```
+
+**SSL Certificate Setup**: By default, Let's Encrypt certificates are automatically obtained via HTTP challenge. For production environments with multiple subdomains, consider using Cloudflare DNS challenge for wildcard certificates.
 
 3. Create Docker network:
 ```bash
