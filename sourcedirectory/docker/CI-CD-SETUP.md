@@ -23,7 +23,7 @@ This guide explains how to set up a complete CI/CD pipeline using Gitea and Dokk
 ### 1. Install Dokku on Host
 
 ```bash
-cd hackermen/docker/dokku
+cd sourcedirectory/docker/dokku
 ./install-dokku.sh
 ```
 
@@ -37,7 +37,7 @@ cat ~/.ssh/id_rsa.pub | sudo dokku ssh-keys:add admin
 ### 3. Deploy Gitea
 
 ```bash
-cd hackermen/docker/gitea
+cd sourcedirectory/docker/gitea
 docker-compose up -d
 ```
 
@@ -46,7 +46,7 @@ Access Gitea at https://git.brainiac.gg and complete the initial setup.
 ### 4. Deploy Dokku Web UI (Optional)
 
 ```bash
-cd hackermen/docker/dokku
+cd sourcedirectory/docker/dokku
 docker-compose up -d
 ```
 
@@ -60,7 +60,7 @@ cat ~/.ssh/dokku-deploy.pub | sudo dokku ssh-keys:add deploy-bot
 
 Then deploy the webhook server:
 ```bash
-cd hackermen/docker/gitea/webhooks
+cd sourcedirectory/docker/gitea/webhooks
 docker-compose up -d
 ```
 

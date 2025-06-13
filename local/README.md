@@ -2,8 +2,8 @@ Quick Start
 
 Clone this repository
 
-bashCopygit clone https://github.com/your-username/hackermen-deployables.git
-cd hackermen-deployables/hackermen
+bashCopygit clone https://github.com/your-username/sourcedirectory-deployables.git
+cd sourcedirectory-deployables/sourcedirectory
 
 Create a .env file with your configuration
 
@@ -156,7 +156,7 @@ server=8.8.4.4
 domain-needed
 bogus-priv
 
-# Custom DNS entries for HACKERMEN services
+# Custom DNS entries for SOURCEDIRECTORY services
 address=/traefik.local/192.168.1.x
 address=/board.local/192.168.1.x
 address=/git.local/192.168.1.x

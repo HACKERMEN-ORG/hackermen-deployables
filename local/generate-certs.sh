@@ -7,7 +7,7 @@ mkdir -p ./data/certs
 openssl genrsa -out ./data/certs/local.key 2048
 
 # Create a certificate signing request
-openssl req -new -key ./data/certs/local.key -out ./data/certs/local.csr -subj "/CN=*.local/O=HACKERMEN/C=US"
+openssl req -new -key ./data/certs/local.key -out ./data/certs/local.csr -subj "/CN=*.local/O=SOURCEDIRECTORY/C=US"
 
 # Create self-signed certificate valid for 365 days
 openssl x509 -req -days 365 -in ./data/certs/local.csr -signkey ./data/certs/local.key -out ./data/certs/local.crt

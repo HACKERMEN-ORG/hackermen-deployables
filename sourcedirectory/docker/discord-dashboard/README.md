@@ -5,7 +5,7 @@ This directory contains the Docker Compose configuration for deploying the Disco
 ## Prerequisites
 
 - Docker and Docker Compose installed
-- Traefik already set up with the hackermen-deployables project
+- Traefik already set up with the sourcedirectory-deployables project
 - Discord bot configured with OAuth2 credentials
 
 ## Setup Instructions
@@ -22,7 +22,7 @@ This directory contains the Docker Compose configuration for deploying the Disco
 
 2. **Configure Domains**
 
-   Make sure your domain is properly configured in the main `.env` file at the root of the hackermen-deployables project.
+   Make sure your domain is properly configured in the main `.env` file at the root of the sourcedirectory-deployables project.
 
 3. **Copy Your Build or Deploy from Source**
 
